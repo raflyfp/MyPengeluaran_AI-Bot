@@ -50,7 +50,7 @@
         role="dialog"
         aria-modal="true"
         aria-labelledby="add-transaction-title"
-        class="fixed inset-x-0 bottom-0 z-[80] mx-auto max-w-[430px] rounded-t-[2rem] border border-white/70 bg-white/92 px-5 pb-6 pt-3 shadow-[0_-24px_60px_rgba(9,60,93,0.22)] backdrop-blur-2xl"
+        class="fixed inset-x-0 bottom-0 z-[80] mx-auto max-w-[430px] rounded-t-[2rem] border border-white/70 bg-white/92 px-5 pb-6 pt-3 shadow-[0_-24px_60px_rgba(9,60,93,0.22)] backdrop-blur-2xl lg:bottom-8 lg:max-w-xl lg:rounded-[2rem]"
     >
         <div class="mx-auto mb-5 h-1.5 w-12 rounded-full bg-[#D8E4E8]"></div>
 

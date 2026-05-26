@@ -23,7 +23,7 @@
     @endphp
 
     <div
-        class="mx-auto min-h-screen max-w-[430px] pb-32"
+        class="mx-auto min-h-screen max-w-[430px] pb-32 lg:ml-72 lg:mr-0 lg:max-w-none lg:pb-12"
         x-data="{
             telegramConnected: @js($telegram['connected']),
             autoCategory: true,
@@ -31,7 +31,7 @@
             reviewFailed: true,
         }"
     >
-        <header class="fixed inset-x-0 top-0 z-40 mx-auto max-w-[430px] border-b border-white/70 bg-[#F7FAFC]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl">
+        <header class="fixed inset-x-0 top-0 z-40 mx-auto max-w-[430px] border-b border-white/70 bg-[#F7FAFC]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl lg:left-72 lg:right-6 lg:top-6 lg:mx-0 lg:max-w-none lg:rounded-[1.75rem] lg:border lg:px-8">
             <div class="flex items-center justify-between gap-4">
                 <div>
                     <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#485A60]">MyPengeluaran</p>
@@ -51,7 +51,7 @@
             </div>
         </header>
 
-        <main class="space-y-7 px-5 pt-28">
+        <main class="grid gap-7 px-5 pt-28 lg:max-w-7xl lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:pt-36">
             <section aria-labelledby="assistant-status-heading" class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#093C5D] via-[#0C6680] to-[#16B69C] p-5 text-white shadow-[0_22px_44px_rgba(9,60,93,0.22)]">
                 <div class="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-white/14 blur-2xl"></div>
                 <div class="absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-[#6FD1D7]/20 blur-3xl"></div>

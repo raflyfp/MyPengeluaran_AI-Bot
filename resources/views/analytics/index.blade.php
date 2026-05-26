@@ -44,8 +44,8 @@
         ];
     @endphp
 
-    <div class="mx-auto min-h-screen max-w-[430px] pb-32" x-data="{ period: 'M' }">
-        <header class="fixed inset-x-0 top-0 z-40 mx-auto max-w-[430px] border-b border-white/70 bg-[#F7FAFC]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl">
+    <div class="mx-auto min-h-screen max-w-[430px] pb-32 lg:ml-72 lg:mr-0 lg:max-w-none lg:pb-12" x-data="{ period: 'M' }">
+        <header class="fixed inset-x-0 top-0 z-40 mx-auto max-w-[430px] border-b border-white/70 bg-[#F7FAFC]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl lg:left-72 lg:right-6 lg:top-6 lg:mx-0 lg:max-w-none lg:rounded-[1.75rem] lg:border lg:px-8">
             <div class="flex items-center justify-between gap-4">
                 <div>
                     <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#485A60]">MyPengeluaran</p>
@@ -64,7 +64,7 @@
             </div>
         </header>
 
-        <main class="space-y-7 px-5 pt-28">
+        <main class="space-y-7 px-5 pt-28 lg:max-w-7xl lg:px-8 lg:pt-36">
             <section aria-labelledby="spending-summary-heading" class="space-y-4">
                 <div class="flex items-center justify-between gap-4">
                     <div>

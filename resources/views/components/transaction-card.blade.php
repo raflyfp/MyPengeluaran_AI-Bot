@@ -23,7 +23,7 @@
     $amountClasses = $type === 'income' ? 'text-[#007A53]' : 'text-[#181C1E]';
 @endphp
 
-<article class="flex items-center justify-between gap-4 rounded-2xl border border-[#E7EEF2] bg-white p-4 shadow-[0_8px_22px_rgba(9,60,93,0.06)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(9,60,93,0.09)] active:scale-[0.985]">
+<article class="flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-[#E7EEF2] bg-white p-4 shadow-[0_8px_22px_rgba(9,60,93,0.06)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(9,60,93,0.09)] active:scale-[0.985] sm:gap-4">
     <div class="flex min-w-0 items-center gap-4">
         <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full {{ $iconClasses }}">
             @switch($icon)
@@ -91,4 +91,10 @@
             {{ $type === 'income' ? 'Income' : 'Expense' }}
         </p>
     </div>
+
+    @isset($actions)
+        <div class="shrink-0">
+            {{ $actions }}
+        </div>
+    @endisset
 </article>

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Category;
 use App\Models\Transaction;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -66,9 +67,12 @@ class TransactionController extends Controller
 
     public function store(StoreTransactionRequest $request): RedirectResponse
     {
+        $validated = $request->validated();
+
         $request->user()->transactions()->create([
-            ...$request->validated(),
-            'source' => $request->validated('source') ?? 'manual',
+            ...$validated,
+            'source' => $validated['source'] ?? 'manual',
+            'transaction_date' => $this->parseLocalDateTime($validated['transaction_date']),
         ]);
 
         return back()
@@ -77,7 +81,13 @@ class TransactionController extends Controller
 
     public function update(UpdateTransactionRequest $request, Transaction $transaction): RedirectResponse
     {
-        $transaction->update($request->validated());
+        $validated = $request->validated();
+
+        if (isset($validated['transaction_date'])) {
+            $validated['transaction_date'] = $this->parseLocalDateTime($validated['transaction_date']);
+        }
+
+        $transaction->update($validated);
 
         return redirect()
             ->route('transactions.index')
@@ -122,18 +132,20 @@ class TransactionController extends Controller
      */
     private function formatTransaction(Transaction $transaction): array
     {
+        $transactionDate = $transaction->transaction_date->copy()->timezone(config('app.timezone'));
+
         return [
             'id' => $transaction->id,
             'title' => $transaction->note ?: $transaction->category?->name ?: 'Transaction',
             'category' => $transaction->category?->name ?? 'Uncategorized',
             'category_id' => $transaction->category_id,
-            'time' => $transaction->transaction_date->format('H:i'),
+            'time' => $transactionDate->format('H:i'),
             'amount' => $this->formatRupiah($transaction->amount, true, $transaction->type),
             'raw_amount' => (float) $transaction->amount,
             'type' => $transaction->type,
             'source' => $transaction->source,
             'note' => $transaction->note,
-            'transaction_date' => $transaction->transaction_date->format('Y-m-d\TH:i'),
+            'transaction_date' => $transactionDate->format('Y-m-d\TH:i'),
             'icon' => $this->mapCategoryIcon($transaction->category?->icon, $transaction->category?->name),
             'tags' => implode(' ', [
                 'all',
@@ -147,7 +159,7 @@ class TransactionController extends Controller
 
     private function dateHeading(Transaction $transaction): string
     {
-        $date = $transaction->transaction_date;
+        $date = $transaction->transaction_date->copy()->timezone(config('app.timezone'));
 
         if ($date->isToday()) {
             return 'Today';
@@ -187,5 +199,10 @@ class TransactionController extends Controller
             str_contains($icon, 'arrow') || str_contains($categoryName, 'transfer') => 'transfer',
             default => 'shopping',
         };
+    }
+
+    private function parseLocalDateTime(string $value): CarbonImmutable
+    {
+        return CarbonImmutable::parse($value, config('app.timezone'))->utc();
     }
 }

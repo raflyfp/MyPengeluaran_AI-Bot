@@ -72,6 +72,7 @@ class TelegramWebhookController extends Controller
         $result = $transactionService->storeFromTelegramMessage($user, $text, $parsed, [
             'update_id' => data_get($update, 'update_id'),
             'message_id' => data_get($messagePayload, 'message_id'),
+            'date' => data_get($messagePayload, 'date'),
             'chat_id' => data_get($messagePayload, 'chat.id'),
             'from_id' => data_get($messagePayload, 'from.id'),
             'username' => data_get($messagePayload, 'from.username'),

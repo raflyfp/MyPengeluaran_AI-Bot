@@ -11,8 +11,8 @@
         : 'bg-[#FFE7E7] text-[#BA1A1A]';
 @endphp
 
-<article class="flex items-center gap-4 rounded-2xl border border-white/80 bg-white/72 p-4 shadow-[0_18px_36px_rgba(9,60,93,0.08)] backdrop-blur-2xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(9,60,93,0.11)] active:scale-[0.98]">
-    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full {{ $iconClasses }}">
+<article class="flex min-w-0 items-center gap-3 rounded-2xl border border-white/80 bg-white/72 p-4 shadow-[0_18px_36px_rgba(9,60,93,0.08)] backdrop-blur-2xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(9,60,93,0.11)] active:scale-[0.98] sm:gap-4">
+    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full {{ $iconClasses }} sm:h-12 sm:w-12">
         @if ($isIncome)
             <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M19 5 5 19M5 19h10M5 19V9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -24,8 +24,8 @@
         @endif
     </div>
 
-    <div class="min-w-0">
-        <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#485A60]">{{ $label }}</p>
-        <p class="mt-0.5 truncate text-xl font-extrabold tracking-normal text-[#181C1E]">{{ $amount }}</p>
+    <div class="min-w-0 flex-1">
+        <p class="truncate text-xs font-bold uppercase tracking-[0.14em] text-[#485A60]">{{ $label }}</p>
+        <p class="mt-0.5 truncate text-lg font-extrabold tracking-normal text-[#181C1E] sm:text-xl">{{ $amount }}</p>
     </div>
 </article>

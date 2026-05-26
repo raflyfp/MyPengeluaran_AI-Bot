@@ -21,7 +21,7 @@
     @endphp
 
     <div
-        class="mx-auto min-h-screen max-w-[430px] pb-32"
+        class="mx-auto min-h-screen max-w-[430px] pb-32 lg:ml-72 lg:mr-0 lg:max-w-none lg:pb-12"
         x-data="{
             editing: null,
             editAction: '',
@@ -37,7 +37,7 @@
             },
         }"
     >
-        <header class="fixed inset-x-0 top-0 z-40 mx-auto max-w-[430px] border-b border-white/70 bg-[#F7FAFC]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl">
+        <header class="fixed inset-x-0 top-0 z-40 mx-auto max-w-[430px] border-b border-white/70 bg-[#F7FAFC]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl lg:left-72 lg:right-6 lg:top-6 lg:mx-0 lg:max-w-none lg:rounded-[1.75rem] lg:border lg:px-8">
             <div class="flex items-center justify-between gap-4">
                 <div>
                     <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#485A60]">MyPengeluaran</p>
@@ -57,7 +57,7 @@
             </div>
         </header>
 
-        <main class="space-y-7 px-5 pt-28">
+        <main class="space-y-7 px-5 pt-28 lg:max-w-7xl lg:px-8 lg:pt-36">
             @if (session('status'))
                 <div class="rounded-2xl border border-[#BFEDE5] bg-[#DFF8F4] px-4 py-3 text-sm font-bold text-[#007A53] shadow-[0_10px_24px_rgba(9,60,93,0.06)]">
                     {{ session('status') }}
@@ -98,7 +98,7 @@
                 </div>
             </section>
 
-            <section aria-labelledby="transaction-summary-heading" class="grid grid-cols-2 gap-4">
+            <section aria-labelledby="transaction-summary-heading" class="grid grid-cols-2 gap-4 lg:max-w-3xl">
                 <h2 id="transaction-summary-heading" class="sr-only">Transaction summary</h2>
 
                 <article class="rounded-2xl border border-white/80 bg-white/68 p-4 shadow-[0_16px_34px_rgba(9,60,93,0.08)] backdrop-blur-xl">
@@ -135,6 +135,7 @@
                                 <div
                                     class="relative overflow-hidden rounded-2xl"
                                     x-data="{ open: false, startX: 0 }"
+                                    @keydown.escape.window="open = false"
                                     @touchstart.passive="startX = $event.changedTouches[0].clientX"
                                     @touchend.passive="
                                         const delta = $event.changedTouches[0].clientX - startX;
@@ -142,7 +143,7 @@
                                         if (delta > 36) open = false;
                                     "
                                 >
-                                    <div class="absolute inset-y-0 right-0 flex items-center gap-2 rounded-2xl bg-gradient-to-l from-[#BA1A1A] to-[#0D5DCF] px-3 text-white">
+                                    <div class="absolute inset-y-0 right-0 flex w-28 items-center justify-center gap-2 rounded-2xl bg-gradient-to-l from-[#BA1A1A] to-[#0D5DCF] px-3 text-white">
                                         <button
                                             type="button"
                                             class="flex h-10 w-10 items-center justify-center rounded-full bg-white/16 transition hover:bg-white/24 active:scale-95"
@@ -167,7 +168,7 @@
 
                                     <div
                                         class="relative transition duration-300 ease-out"
-                                        :class="open ? '-translate-x-24' : 'translate-x-0'"
+                                        :class="open ? '-translate-x-28' : 'translate-x-0'"
                                         @click.outside="open = false"
                                     >
                                         <x-transaction-card
@@ -177,7 +178,20 @@
                                             :amount="$transaction['amount']"
                                             :type="$transaction['type']"
                                             :icon="$transaction['icon']"
-                                        />
+                                        >
+                                            <x-slot:actions>
+                                                <button
+                                                    type="button"
+                                                    class="flex h-9 w-9 items-center justify-center rounded-full border border-[#DCE8EB] bg-[#F7FAFC] text-[#093C5D] transition duration-200 hover:bg-[#EAF7F8] active:scale-95"
+                                                    @click.stop="open = true"
+                                                    aria-label="Show transaction actions"
+                                                >
+                                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                        <path d="M12 6h.01M12 12h.01M12 18h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                                                    </svg>
+                                                </button>
+                                            </x-slot:actions>
+                                        </x-transaction-card>
                                     </div>
                                 </div>
                             @endforeach
@@ -209,10 +223,10 @@
             x-cloak
             x-show="editing"
             x-transition.opacity
-            class="fixed inset-0 z-50 flex items-end justify-center bg-[#061E2E]/42 px-4 pb-4 backdrop-blur-sm"
+            class="fixed inset-0 z-[90] flex items-end justify-center bg-[#061E2E]/42 px-4 pb-4 backdrop-blur-sm"
             @keydown.escape.window="closeEdit()"
         >
-            <div class="w-full max-w-[430px] rounded-[1.75rem] border border-white/80 bg-white p-5 shadow-[0_24px_54px_rgba(9,60,93,0.24)]" x-show="editing" x-transition:enter="transition ease-out duration-250" x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
+            <div class="max-h-[92vh] w-full max-w-[430px] overflow-y-auto rounded-[1.75rem] border border-white/80 bg-white p-5 shadow-[0_24px_54px_rgba(9,60,93,0.24)] lg:max-w-xl" x-show="editing" x-transition:enter="transition ease-out duration-250" x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
                 <div class="mb-5 flex items-center justify-between gap-4">
                     <div>
                         <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#72777E]">Update</p>

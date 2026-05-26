@@ -13,8 +13,8 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="min-h-screen bg-[#F7FAFC] font-sans text-[#181C1E] antialiased selection:bg-[#6FD1D7]/30 selection:text-[#093C5D]">
-        <div class="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top_right,rgba(111,209,215,0.24),transparent_32%),linear-gradient(180deg,#F7FAFC_0%,#EEF7FA_100%)]">
+    <body class="min-h-screen overflow-x-hidden bg-[#F7FAFC] font-sans text-[#181C1E] antialiased selection:bg-[#6FD1D7]/30 selection:text-[#093C5D]">
+        <div class="min-h-screen w-full overflow-x-hidden bg-[radial-gradient(circle_at_top_right,rgba(111,209,215,0.24),transparent_32%),linear-gradient(180deg,#F7FAFC_0%,#EEF7FA_100%)]">
             {{ $slot }}
 
             @auth

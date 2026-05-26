@@ -6,6 +6,7 @@ use App\Models\BotMessage;
 use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 
 class TransactionService
@@ -43,7 +44,7 @@ class TransactionService
                 'amount' => $parsed['amount'],
                 'note' => $parsed['note'],
                 'source' => 'telegram',
-                'transaction_date' => now(),
+                'transaction_date' => $this->telegramTransactionDate($telegramMeta),
             ]);
 
             return [
@@ -74,5 +75,16 @@ class TransactionService
         ], [
             'icon' => $type === 'income' ? 'wallet' : 'receipt',
         ]);
+    }
+
+    private function telegramTransactionDate(array $telegramMeta): CarbonImmutable
+    {
+        $timestamp = data_get($telegramMeta, 'date');
+
+        if (is_numeric($timestamp)) {
+            return CarbonImmutable::createFromTimestamp((int) $timestamp, 'UTC');
+        }
+
+        return CarbonImmutable::now('UTC');
     }
 }

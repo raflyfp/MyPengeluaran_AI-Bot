@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use Carbon\CarbonImmutable;
+use Carbon\CarbonPeriod;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -35,6 +38,7 @@ class DashboardController extends Controller
                 ->limit(5)
                 ->get()
                 ->map(fn (Transaction $transaction): array => $this->formatTransaction($transaction)),
+            'cashflow' => $this->cashflowChartData($user),
         ]);
     }
 
@@ -75,13 +79,93 @@ class DashboardController extends Controller
      */
     private function formatTransaction(Transaction $transaction): array
     {
+        $transactionDate = $transaction->transaction_date
+            ->copy()
+            ->timezone(config('app.timezone'));
+
         return [
             'title' => $transaction->note ?: $transaction->category?->name ?: 'Transaction',
             'category' => $transaction->category?->name ?? 'Uncategorized',
-            'time' => $transaction->transaction_date->diffForHumans(),
+            'time' => $this->formatTransactionTime($transactionDate),
             'amount' => $this->formatRupiah($transaction->amount, true, $transaction->type),
             'type' => $transaction->type,
             'icon' => $this->mapCategoryIcon($transaction->category?->icon, $transaction->category?->name),
+        ];
+    }
+
+    private function formatTransactionTime($transactionDate): string
+    {
+        $now = now(config('app.timezone'));
+
+        if ($transactionDate->isSameDay($now)) {
+            $minutes = (int) $transactionDate->diffInMinutes($now, false);
+
+            if ($minutes >= 0 && $minutes < 3) {
+                return 'Baru saja';
+            }
+
+            return 'Hari ini, '.$transactionDate->format('H:i');
+        }
+
+        if ($transactionDate->isYesterday()) {
+            return 'Kemarin, '.$transactionDate->format('H:i');
+        }
+
+        return $transactionDate->format('d M, H:i');
+    }
+
+    /**
+     * @return array{line_points: string, area_points: string, has_data: bool, labels: array<int, string>}
+     */
+    private function cashflowChartData($user): array
+    {
+        $start = now()->copy()->subDays(6)->startOfDay();
+        $end = now()->copy()->endOfDay();
+        $rows = Transaction::query()
+            ->forUser($user)
+            ->betweenDates($start, $end)
+            ->selectRaw('DATE(transactions.transaction_date) as day')
+            ->selectRaw("COALESCE(SUM(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE -transactions.amount END), 0) as net_total")
+            ->groupByRaw('DATE(transactions.transaction_date)')
+            ->orderByRaw('DATE(transactions.transaction_date)')
+            ->get()
+            ->keyBy(fn ($row): string => CarbonImmutable::parse($row->day)->format('Y-m-d'));
+
+        $period = collect(CarbonPeriod::create($start, '1 day', $end));
+        $values = $period
+            ->map(fn ($date): float => (float) ($rows->get($date->format('Y-m-d'))?->net_total ?? 0))
+            ->values();
+
+        if ($values->every(fn (float $value): bool => $value === 0.0)) {
+            $values = collect([0, 8000, 14000, 9000, 18000, 12000, 22000]);
+            $hasData = false;
+        } else {
+            $hasData = true;
+        }
+
+        $min = (float) $values->min();
+        $max = (float) $values->max();
+        $range = max(1, $max - $min);
+        $count = max(1, $values->count() - 1);
+        $left = 24;
+        $right = 296;
+        $top = 34;
+        $bottom = 136;
+
+        $points = $values
+            ->map(function (float $value, int $index) use ($left, $right, $top, $bottom, $range, $min, $count): string {
+                $x = $left + (($right - $left) / $count) * $index;
+                $y = $bottom - ((($value - $min) / $range) * ($bottom - $top));
+
+                return round($x, 1).','.round($y, 1);
+            })
+            ->implode(' ');
+
+        return [
+            'line_points' => $points,
+            'area_points' => "{$left},176 {$points} {$right},176",
+            'has_data' => $hasData,
+            'labels' => $period->map(fn ($date): string => $date->format('D'))->values()->all(),
         ];
     }
 

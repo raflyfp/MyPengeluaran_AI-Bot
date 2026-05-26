@@ -16,7 +16,7 @@ class CategorySeeder extends Seeder
             ['name' => 'Salary', 'icon' => 'briefcase', 'type' => 'income'],
             ['name' => 'Freelance', 'icon' => 'laptop', 'type' => 'income'],
             ['name' => 'Cashback', 'icon' => 'sparkles', 'type' => 'income'],
-            ['name' => 'Food & Dining', 'icon' => 'utensils', 'type' => 'expense'],
+            ['name' => 'Food & Drink', 'icon' => 'utensils', 'type' => 'expense'],
             ['name' => 'Groceries', 'icon' => 'shopping-cart', 'type' => 'expense'],
             ['name' => 'Transport', 'icon' => 'car', 'type' => 'expense'],
             ['name' => 'Bills & Utilities', 'icon' => 'receipt', 'type' => 'expense'],
