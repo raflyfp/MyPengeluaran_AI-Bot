@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>MyPengeluaran - Home Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#191c1e",
+                        "outline-variant": "#bbcabf",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2d3133",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#4edea3",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-tint": "#006c49",
+                        "on-secondary-container": "#fefcff",
+                        "surface": "#f7f9fb",
+                        "secondary-container": "#2170e4",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#3c4a42",
+                        "surface-container-low": "#f2f4f6",
+                        "tertiary": "#565e74",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-primary-fixed": "#002113",
+                        "primary-fixed": "#6ffbbe",
+                        "on-primary-container": "#00422b",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#004395",
+                        "primary-fixed-dim": "#4edea3",
+                        "on-primary-fixed-variant": "#005236",
+                        "surface-dim": "#d8dadc",
+                        "surface-container": "#eceef0",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#131b2e",
+                        "tertiary-container": "#9ba2bb",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "primary": "#006c49",
+                        "on-tertiary-container": "#31394d",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "secondary-fixed": "#d8e2ff",
+                        "primary-container": "#10b981",
+                        "background": "#f7f9fb",
+                        "secondary": "#0058be",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-error": "#ffffff",
+                        "outline": "#6c7a71"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "card-gap": "12px",
+                        "section-margin": "32px",
+                        "gutter": "16px",
+                        "container-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-caps": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "numeric-bold": ["Hanken Grotesk"],
+                        "body-sm": ["Inter"],
+                        "display-currency": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "30px", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "numeric-bold": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-currency": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    },
+                    "boxShadow": {
+                        "card": "0px 10px 30px rgba(15, 23, 42, 0.04)",
+                        "glass": "0 4px 30px rgba(0, 0, 0, 0.1)",
+                        "fab": "0px 12px 24px rgba(16, 185, 129, 0.3)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .emerald-gradient {
+            background: linear-gradient(135deg, #10b981 0%, #006c49 100%);
+        }
+        .fab-gradient {
+            background: linear-gradient(135deg, #10b981 0%, #008080 100%);
+        }
+        /* Chart Animation Simulation */
+        @keyframes drawLine {
+            from { stroke-dashoffset: 200; }
+            to { stroke-dashoffset: 0; }
+        }
+        .chart-path {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            animation: drawLine 2s ease-out forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen pb-[100px] font-body-lg text-body-lg">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-on-surface/80 backdrop-blur-xl border-b border-white/20 shadow-sm flex justify-between items-center px-container-padding h-16">
+<div class="flex items-center gap-3">
+<img alt="User avatar profile picture" class="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" data-alt="A close-up portrait of a professional individual used as an avatar. The image should be well-lit with soft, natural lighting against a neutral background. The subject is looking slightly off-camera with a subtle, friendly expression, embodying a trustworthy and modern fintech user aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOtrxzmwp-Yf7o_5sGZ_qtffP53rygh6VjibXVUn_sQ8bqHYI4T7x38hFM96c3vKZLNK8RtTndPNoe8_Rmvf8oltp93bkExpvoh0VpGlG14d8Qwa4NuG9bAtj4Z_Q3NzUSh84QsVuvgQ2aA4G1h0JAomz4v448dH2fpDLJqcJkfp_g_BTvsZ8Vdwb-VPajRMbdyARegfCBi1AT0Bzy0dbZIpAF1ni5K6ZvJqifIjS29Rd6Nzjj4Xdw06AGg0UC2C8F7iVanQT1JQ"/>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Good Morning</p>
+<h1 class="font-headline-md text-headline-md-mobile font-bold text-primary dark:text-primary-fixed">Alex D.</h1>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-low text-primary hover:opacity-80 transition-opacity active:scale-95">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="pt-[88px] px-container-padding max-w-[430px] mx-auto flex flex-col gap-section-margin">
+<!-- Total Balance Card (Bento Layout Area 1) -->
+<section class="flex flex-col gap-card-gap">
+<div class="emerald-gradient rounded-2xl p-6 text-on-primary shadow-card relative overflow-hidden active:scale-[0.98] transition-transform duration-200">
+<!-- Decorative background elements -->
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+<div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/10 to-transparent"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-center mb-2">
+<h2 class="font-label-caps text-label-caps text-on-primary/80 uppercase tracking-wider">Total Balance</h2>
+<span class="material-symbols-outlined text-white/80 text-sm">visibility</span>
+</div>
+<div class="font-display-currency text-display-currency mb-4 tracking-tight">
+                        $24,562.00
+                    </div>
+<div class="flex items-center gap-2 text-sm">
+<span class="flex items-center bg-white/20 px-2 py-1 rounded-full backdrop-blur-sm text-xs font-medium">
+<span class="material-symbols-outlined text-[14px] mr-1">arrow_upward</span>
+                            +2.4%
+                        </span>
+<span class="text-on-primary/80 font-body-sm text-body-sm">vs last month</span>
+</div>
+</div>
+</div>
+<!-- Income/Expense Widget (Glassmorphism) -->
+<div class="grid grid-cols-2 gap-3">
+<div class="glass-panel rounded-2xl p-4 shadow-card flex items-center gap-3 active:scale-[0.98] transition-transform">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">south_west</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Income</p>
+<p class="font-numeric-bold text-numeric-bold text-on-surface">$4,250</p>
+</div>
+</div>
+<div class="glass-panel rounded-2xl p-4 shadow-card flex items-center gap-3 active:scale-[0.98] transition-transform">
+<div class="w-10 h-10 rounded-full bg-error-container/50 flex items-center justify-center text-error">
+<span class="material-symbols-outlined">north_east</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">Expense</p>
+<p class="font-numeric-bold text-numeric-bold text-on-surface">$1,840</p>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Financial Insight -->
+<section>
+<div class="bg-surface-container-low rounded-2xl p-4 border border-surface-variant flex items-start gap-4">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span>
+</div>
+<div>
+<h3 class="font-label-caps text-label-caps text-on-surface uppercase mb-1">Smart Insight</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                        You've saved <strong class="text-primary font-semibold">15% more</strong> this week compared to your average! Keep up the good work on dining out.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Cashflow Chart -->
+<section class="bg-white rounded-2xl p-5 shadow-card border border-surface-container-low">
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-headline-md text-headline-md-mobile text-on-surface">Cashflow</h2>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-surface text-on-surface-variant font-label-caps text-label-caps cursor-pointer">W</span>
+<span class="px-3 py-1 rounded-full bg-primary text-on-primary font-label-caps text-label-caps shadow-sm cursor-pointer">M</span>
+<span class="px-3 py-1 rounded-full bg-surface text-on-surface-variant font-label-caps text-label-caps cursor-pointer">Y</span>
+</div>
+</div>
+<div class="h-32 w-full relative">
+<!-- Simulated SVG Chart -->
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 40">
+<!-- Grid lines -->
+<line stroke="#eceef0" stroke-dasharray="2 2" stroke-width="0.5" x1="0" x2="100" y1="10" y2="10"></line>
+<line stroke="#eceef0" stroke-dasharray="2 2" stroke-width="0.5" x1="0" x2="100" y1="20" y2="20"></line>
+<line stroke="#eceef0" stroke-dasharray="2 2" stroke-width="0.5" x1="0" x2="100" y1="30" y2="30"></line>
+<!-- Area Fill -->
+<path d="M0,40 L0,25 Q10,15 20,20 T40,15 T60,25 T80,10 T100,5 L100,40 Z" fill="url(#chart-gradient)" opacity="0.2"></path>
+<!-- Line -->
+<path class="chart-path" d="M0,25 Q10,15 20,20 T40,15 T60,25 T80,10 T100,5" fill="none" stroke="#10b981" stroke-linecap="round" stroke-width="1.5"></path>
+<defs>
+<lineargradient id="chart-gradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#10b981"></stop>
+<stop offset="100%" stop-color="#10b981" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+</section>
+<!-- Recent Transactions -->
+<section class="mb-8">
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-headline-md text-headline-md-mobile text-on-surface">Recent Activity</h2>
+<a class="font-label-caps text-label-caps text-primary hover:underline" href="#">See All</a>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Transaction Item 1 -->
+<div class="bg-white rounded-xl p-4 shadow-sm border border-surface-container-low flex items-center justify-between active:scale-[0.98] transition-transform">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<div>
+<h4 class="font-numeric-bold text-numeric-bold text-on-surface text-base">Whole Foods Market</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Groceries • Today, 10:42 AM</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-numeric-bold text-numeric-bold text-on-surface text-base">-$84.50</p>
+</div>
+</div>
+<!-- Transaction Item 2 -->
+<div class="bg-white rounded-xl p-4 shadow-sm border border-surface-container-low flex items-center justify-between active:scale-[0.98] transition-transform">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">directions_car</span>
+</div>
+<div>
+<h4 class="font-numeric-bold text-numeric-bold text-on-surface text-base">Uber Rides</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Transport • Yesterday</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-numeric-bold text-numeric-bold text-on-surface text-base">-$15.20</p>
+</div>
+</div>
+<!-- Transaction Item 3 -->
+<div class="bg-white rounded-xl p-4 shadow-sm border border-surface-container-low flex items-center justify-between active:scale-[0.98] transition-transform">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">work</span>
+</div>
+<div>
+<h4 class="font-numeric-bold text-numeric-bold text-on-surface text-base">Upwork Escrow</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Freelance • 2 days ago</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-numeric-bold text-numeric-bold text-primary text-base">+$850.00</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Shared Component Shell) -->
+<nav class="fixed bottom-4 left-4 right-4 rounded-full z-50 bg-surface/80 dark:bg-on-surface/80 backdrop-blur-xl border border-white/20 shadow-lg flex justify-between items-center px-4 py-2 w-[calc(100%-32px)] mx-auto max-w-[400px]">
+<!-- Icons mapping based on intent: home is active -->
+<a class="flex items-center justify-center bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container rounded-full w-12 h-12 shadow-md active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+</a>
+<a class="flex items-center justify-center text-on-surface-variant dark:text-outline-variant w-12 h-12 hover:bg-surface-variant/50 dark:hover:bg-surface-container-high/50 rounded-full transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+</a>
+<!-- Floating Action Button Injection in Nav -->
+<div class="relative -top-6">
+<button class="w-16 h-16 rounded-full fab-gradient shadow-fab flex items-center justify-center text-white border-4 border-surface hover:scale-105 active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+</div>
+<a class="flex items-center justify-center text-on-surface-variant dark:text-outline-variant w-12 h-12 hover:bg-surface-variant/50 dark:hover:bg-surface-container-high/50 rounded-full transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+</a>
+<a class="flex items-center justify-center text-on-surface-variant dark:text-outline-variant w-12 h-12 hover:bg-surface-variant/50 dark:hover:bg-surface-container-high/50 rounded-full transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+</a>
+</nav>
+</body></html>
