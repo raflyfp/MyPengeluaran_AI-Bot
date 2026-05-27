@@ -157,7 +157,7 @@ class AnalyticsController extends Controller
             ->map(function ($category, int $index): array {
                 return [
                     'id' => $category->id,
-                    'name' => $category->name,
+                'name' => $this->displayCategoryName($category->name),
                     'icon' => $category->icon,
                     'total' => (float) $category->total,
                     'transactions_count' => (int) $category->transactions_count,
@@ -268,5 +268,14 @@ class AnalyticsController extends Controller
         $prefix = $withSign && $numericAmount > 0 ? '+' : ($withSign && $numericAmount < 0 ? '-' : '');
 
         return $prefix.'Rp '.number_format(abs($numericAmount), 0, ',', '.');
+    }
+
+    private function displayCategoryName(?string $categoryName): string
+    {
+        return match (strtolower((string) $categoryName)) {
+            'food & dining', 'food and dining' => 'Food & Drink',
+            '' => 'Uncategorized',
+            default => (string) $categoryName,
+        };
     }
 }

@@ -1,7 +1,7 @@
 @props([
     'label' => 'Total Balance',
     'amount' => 'Rp 24.562.000',
-    'change' => '+2.4%',
+    'change' => '0%',
     'caption' => 'vs bulan lalu',
 ])
 

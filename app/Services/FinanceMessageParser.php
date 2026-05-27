@@ -10,6 +10,19 @@ class FinanceMessageParser
     public function parse(string $message): array
     {
         $normalized = $this->normalize($message);
+
+        if ($this->looksLikeFinanceQuestion($normalized)) {
+            return [
+                'type' => 'expense',
+                'amount' => null,
+                'note' => trim($message),
+                'category_hint' => 'Other Expense',
+                'confidence' => 0.25,
+                'raw_message' => $message,
+                'intent' => 'finance_advice',
+            ];
+        }
+
         $amount = $this->detectAmount($normalized);
         $type = $this->detectType($normalized);
         $categoryHint = $this->detectCategoryHint($normalized, $type);
@@ -21,6 +34,7 @@ class FinanceMessageParser
             'category_hint' => $categoryHint,
             'confidence' => $amount !== null ? 0.9 : 0.35,
             'raw_message' => $message,
+            'intent' => $amount !== null ? 'record_transaction' : 'finance_advice',
         ];
     }
 
@@ -31,25 +45,47 @@ class FinanceMessageParser
 
     private function detectAmount(string $message): ?float
     {
-        if (! preg_match('/(?<!\w)(\d[\d.,]*)(?:\s*)(rb|ribu|k|jt|juta|mio|m)?(?!\w)/i', $message, $matches)) {
+        if (! preg_match_all('/(?<!\w)(\d[\d.,]*)(?:\s*)(rb|ribu|k|jt|juta|mio|m)?(?!\w)/i', $message, $matches, PREG_SET_ORDER)) {
             return null;
         }
 
-        $rawNumber = $matches[1];
-        $suffix = strtolower($matches[2] ?? '');
+        $total = 0.0;
 
-        $number = $suffix
-            ? (float) str_replace(',', '.', $rawNumber)
-            : (float) str_replace(['.', ','], '', $rawNumber);
+        foreach ($matches as $match) {
+            $rawNumber = $match[1];
+            $suffix = strtolower($match[2] ?? '');
 
-        $multiplier = match ($suffix) {
-            'rb', 'ribu', 'k' => 1000,
-            'jt', 'juta', 'mio' => 1000000,
-            'm' => 1000000,
-            default => 1,
-        };
+            $number = $suffix
+                ? (float) str_replace(',', '.', $rawNumber)
+                : (float) str_replace(['.', ','], '', $rawNumber);
 
-        return $number * $multiplier;
+            $multiplier = match ($suffix) {
+                'rb', 'ribu', 'k' => 1000,
+                'jt', 'juta', 'mio' => 1000000,
+                'm' => 1000000,
+                default => 1,
+            };
+
+            $total += $number * $multiplier;
+        }
+
+        return $total;
+    }
+
+    private function looksLikeFinanceQuestion(string $message): bool
+    {
+        if (! $this->detectAmount($message)) {
+            return false;
+        }
+
+        if (str_contains($message, '?')) {
+            return true;
+        }
+
+        return (bool) preg_match(
+            '/\b(mahal|murah|worth|aman|gasi|ga sih|gak sih|gak|nggak|ngga|boleh|mending|sebaiknya|budget|rekomendasi|saran|cocok|kemahalan)\b/i',
+            $message,
+        );
     }
 
     private function detectType(string $message): string
@@ -89,7 +125,7 @@ class FinanceMessageParser
         }
 
         return match (true) {
-            str_contains($message, 'makan') || str_contains($message, 'kopi') || str_contains($message, 'coffee') || str_contains($message, 'lunch') || str_contains($message, 'dinner') => 'Food & Dining',
+            str_contains($message, 'makan') || str_contains($message, 'kopi') || str_contains($message, 'coffee') || str_contains($message, 'lunch') || str_contains($message, 'dinner') || str_contains($message, 'minum') || str_contains($message, 'teh') => 'Food & Drink',
             str_contains($message, 'grab') || str_contains($message, 'gojek') || str_contains($message, 'taxi') || str_contains($message, 'bensin') || str_contains($message, 'transport') => 'Transport',
             str_contains($message, 'listrik') || str_contains($message, 'pln') || str_contains($message, 'air') || str_contains($message, 'internet') || str_contains($message, 'token') => 'Bills & Utilities',
             str_contains($message, 'obat') || str_contains($message, 'dokter') || str_contains($message, 'pharmacy') || str_contains($message, 'health') => 'Health',

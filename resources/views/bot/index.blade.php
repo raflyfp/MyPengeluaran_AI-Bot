@@ -135,7 +135,7 @@
                     </div>
 
                     <div class="ml-auto max-w-[88%] rounded-2xl rounded-br-md bg-gradient-to-br from-[#093C5D] to-[#0D8B7D] p-4 text-white shadow-[0_14px_30px_rgba(9,60,93,0.18)]">
-                        <p class="text-sm font-bold">Logged as Food & Dining</p>
+                        <p class="text-sm font-bold">Logged as Food & Drink</p>
                         <div class="mt-3 grid grid-cols-2 gap-3 text-xs">
                             <div class="rounded-xl bg-white/14 p-3">
                                 <p class="font-bold uppercase tracking-[0.12em] text-white/65">Amount</p>

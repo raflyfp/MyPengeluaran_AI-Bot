@@ -22,7 +22,7 @@ class BotMessageSeeder extends Seeder
                 'parsed_data' => [
                     'type' => 'expense',
                     'amount' => 58000,
-                    'category' => 'Food & Dining',
+                    'category' => 'Food & Drink',
                     'merchant' => 'Ayam Geprek Sambal Ijo',
                     'confidence' => 0.98,
                 ],

@@ -12,6 +12,19 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
+        $oldFoodCategory = Category::query()
+            ->where('name', 'Food & Dining')
+            ->where('type', 'expense')
+            ->first();
+        $newFoodCategory = Category::query()
+            ->where('name', 'Food & Drink')
+            ->where('type', 'expense')
+            ->first();
+
+        if ($oldFoodCategory && ! $newFoodCategory) {
+            $oldFoodCategory->update(['name' => 'Food & Drink']);
+        }
+
         $categories = [
             ['name' => 'Salary', 'icon' => 'briefcase', 'type' => 'income'],
             ['name' => 'Freelance', 'icon' => 'laptop', 'type' => 'income'],

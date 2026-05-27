@@ -24,6 +24,7 @@ WhatsApp integration saat ini masih diskip dan belum diaktifkan.
 - Alpine.js
 - ApexCharts
 - Telegram Bot API
+- Google Gemini API
 
 ## UI Style
 
@@ -188,6 +189,7 @@ Service yang digunakan:
 
 ```text
 app/Services/FinanceMessageParser.php
+app/Services/GeminiFinanceMessageParser.php
 app/Services/TelegramBotClient.php
 app/Services/TelegramUserResolver.php
 app/Services/TransactionService.php
@@ -198,18 +200,19 @@ Alur teknis:
 1. Telegram mengirim update ke webhook Laravel.
 2. `TelegramWebhookController` membaca pesan.
 3. Jika pesan `/start` atau `/help`, bot mengirim panduan.
-4. Jika pesan transaksi, `FinanceMessageParser` membaca nominal, tipe, note, dan kategori.
-5. `TelegramUserResolver` menentukan user tujuan.
-6. `TransactionService` menyimpan data ke:
+4. Jika pesan transaksi, `GeminiFinanceMessageParser` mencoba membaca nominal, tipe, note, dan kategori memakai Gemini.
+5. Jika Gemini belum dikonfigurasi atau request gagal, sistem otomatis fallback ke `FinanceMessageParser`.
+6. `TelegramUserResolver` menentukan user tujuan.
+7. `TransactionService` menyimpan data ke:
    - `bot_messages`
    - `transactions`
-7. Bot mengirim balasan konfirmasi ke Telegram.
+8. Bot mengirim balasan konfirmasi ke Telegram, termasuk parser yang dipakai.
 
 Contoh pesan:
 
 ```text
-makan 25000      -> expense, Food & Dining, Rp 25.000
-kopi 18rb        -> expense, Food & Dining, Rp 18.000
+makan 25000      -> expense, Food & Drink, Rp 25.000
+kopi 18rb        -> expense, Food & Drink, Rp 18.000
 gaji 5000000     -> income, Salary, Rp 5.000.000
 ```
 
@@ -291,6 +294,7 @@ app/
     User.php
   Services/
     FinanceMessageParser.php
+    GeminiFinanceMessageParser.php
     TelegramBotClient.php
     TelegramUserResolver.php
     TransactionService.php
@@ -361,6 +365,9 @@ DB_PASSWORD=
 
 TELEGRAM_BOT_TOKEN=
 TELEGRAM_DEFAULT_USER_EMAIL=
+
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-3.5-flash
 ```
 
 Jangan commit `.env` ke Git. File `.env` sudah masuk `.gitignore`.
@@ -449,6 +456,50 @@ Jika berhasil:
 - Bot membalas pesan konfirmasi.
 - Halaman Bot Assistant menampilkan activity terbaru.
 
+Command bot:
+
+```text
+/start
+/help
+/categories
+```
+
+Command tersebut menampilkan contoh input dan daftar kategori income/expense yang tersedia.
+
+## Setup Gemini AI Parser
+
+Isi API key Gemini di `.env`:
+
+```env
+GEMINI_API_KEY=your-gemini-api-key
+GEMINI_MODEL=gemini-3.5-flash
+```
+
+Refresh konfigurasi Laravel:
+
+```bash
+php artisan config:clear
+```
+
+Setelah aktif, pesan Telegram seperti:
+
+```text
+kopi 18rb
+makan siang 25k
+bayar listrik 150rb
+gaji freelance 1,5jt
+```
+
+akan diproses oleh Gemini untuk menentukan:
+
+- `type`
+- `amount`
+- `note`
+- `category_hint`
+- `confidence`
+
+Jika Gemini gagal, sistem tetap mencatat lewat parser regex lama selama format nominal masih terbaca.
+
 ## Route Ringkas
 
 ```text
@@ -516,6 +567,7 @@ Sudah berjalan:
 - Analytics backend query dan ApexCharts.
 - Telegram webhook.
 - Telegram message parsing.
+- Gemini AI parser dengan fallback regex.
 - Bot message logging.
 - Profile data dari user login.
 - Mobile-first layout.

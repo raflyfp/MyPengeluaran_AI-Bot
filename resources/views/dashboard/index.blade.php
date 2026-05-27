@@ -41,7 +41,7 @@
                 <x-balance-card
                     label="Total Balance"
                     :amount="$summary['formatted_current_balance']"
-                    change="+2,4%"
+                    :change="$summary['balance_change_label']"
                     caption="vs bulan lalu"
                 />
 

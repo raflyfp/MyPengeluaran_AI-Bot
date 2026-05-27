@@ -29,6 +29,7 @@ class DashboardController extends Controller
                 'formatted_monthly_income_total' => $this->formatRupiah($monthlySummary['income_total']),
                 'formatted_monthly_expense_total' => $this->formatRupiah($monthlySummary['expense_total']),
                 'formatted_current_balance' => $this->formatRupiah($currentBalance),
+                'balance_change_label' => $this->balanceChangeLabel($user),
                 'category_spending_breakdown' => $this->formatCategoryBreakdown($categoryBreakdown, $monthlyExpenseTotal),
             ],
             'transactions' => Transaction::query()
@@ -64,7 +65,7 @@ class DashboardController extends Controller
             $total = (float) $category->total;
 
             return [
-                'name' => $category->name,
+                'name' => $this->displayCategoryName($category->name),
                 'icon' => $category->icon,
                 'total' => (string) $category->total,
                 'formatted_total' => $this->formatRupiah($category->total),
@@ -85,12 +86,36 @@ class DashboardController extends Controller
 
         return [
             'title' => $transaction->note ?: $transaction->category?->name ?: 'Transaction',
-            'category' => $transaction->category?->name ?? 'Uncategorized',
+            'category' => $this->displayCategoryName($transaction->category?->name),
             'time' => $this->formatTransactionTime($transactionDate),
             'amount' => $this->formatRupiah($transaction->amount, true, $transaction->type),
             'type' => $transaction->type,
             'icon' => $this->mapCategoryIcon($transaction->category?->icon, $transaction->category?->name),
         ];
+    }
+
+    private function balanceChangeLabel($user): string
+    {
+        $now = now();
+        $currentMonthNet = (float) Transaction::monthlySummaryFor($user, $now)['net_total'];
+        $previousMonthNet = (float) Transaction::monthlySummaryFor($user, $now->copy()->subMonth())['net_total'];
+
+        if ($previousMonthNet == 0.0) {
+            return $currentMonthNet == 0.0 ? '0%' : 'New';
+        }
+
+        $change = (($currentMonthNet - $previousMonthNet) / abs($previousMonthNet)) * 100;
+
+        return ($change > 0 ? '+' : '').number_format($change, 1, ',', '.').'%';
+    }
+
+    private function displayCategoryName(?string $categoryName): string
+    {
+        return match (strtolower((string) $categoryName)) {
+            'food & dining', 'food and dining' => 'Food & Drink',
+            '' => 'Uncategorized',
+            default => (string) $categoryName,
+        };
     }
 
     private function formatTransactionTime($transactionDate): string

@@ -15,9 +15,11 @@ Route::get('/', function () {
         : redirect()->route('login');
 });
 
+// Endpoint utama yang dipasang ke Telegram setWebhook.
 Route::post('/telegram/webhook', TelegramWebhookController::class)
     ->name('webhooks.telegram');
 
+// Alias webhook cadangan kalau nanti provider/tunnel memakai path /webhooks/telegram.
 Route::post('/webhooks/telegram', TelegramWebhookController::class);
 
 Route::middleware(['auth', 'verified'])->group(function () {

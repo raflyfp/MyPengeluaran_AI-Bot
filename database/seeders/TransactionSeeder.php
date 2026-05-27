@@ -42,7 +42,7 @@ class TransactionSeeder extends Seeder
                 'transaction_date' => now()->setTime(10, 42),
             ],
             [
-                'category' => 'Food & Dining',
+                'category' => 'Food & Drink',
                 'type' => 'expense',
                 'amount' => 58000,
                 'note' => 'Ayam geprek lunch',

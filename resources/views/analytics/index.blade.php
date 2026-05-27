@@ -24,7 +24,7 @@
         ];
 
         $categories = $categories ?? [
-            ['name' => 'Food & Dining', 'amount' => 'Rp 2.140.000', 'share' => 29, 'color' => '#0D8B7D'],
+            ['name' => 'Food & Drink', 'amount' => 'Rp 2.140.000', 'share' => 29, 'color' => '#0D8B7D'],
             ['name' => 'Bills & Utilities', 'amount' => 'Rp 1.680.000', 'share' => 22, 'color' => '#093C5D'],
             ['name' => 'Transport', 'amount' => 'Rp 1.120.000', 'share' => 15, 'color' => '#3B7597'],
             ['name' => 'Shopping', 'amount' => 'Rp 980.000', 'share' => 13, 'color' => '#6FD1D7'],

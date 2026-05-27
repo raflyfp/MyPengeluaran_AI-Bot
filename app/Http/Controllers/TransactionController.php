@@ -136,8 +136,8 @@ class TransactionController extends Controller
 
         return [
             'id' => $transaction->id,
-            'title' => $transaction->note ?: $transaction->category?->name ?: 'Transaction',
-            'category' => $transaction->category?->name ?? 'Uncategorized',
+            'title' => $transaction->note ?: $this->displayCategoryName($transaction->category?->name),
+            'category' => $this->displayCategoryName($transaction->category?->name),
             'category_id' => $transaction->category_id,
             'time' => $transactionDate->format('H:i'),
             'amount' => $this->formatRupiah($transaction->amount, true, $transaction->type),
@@ -204,5 +204,14 @@ class TransactionController extends Controller
     private function parseLocalDateTime(string $value): CarbonImmutable
     {
         return CarbonImmutable::parse($value, config('app.timezone'))->utc();
+    }
+
+    private function displayCategoryName(?string $categoryName): string
+    {
+        return match (strtolower((string) $categoryName)) {
+            'food & dining', 'food and dining' => 'Food & Drink',
+            '' => 'Uncategorized',
+            default => (string) $categoryName,
+        };
     }
 }

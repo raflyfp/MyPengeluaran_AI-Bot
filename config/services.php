@@ -36,8 +36,15 @@ return [
     ],
 
     'telegram' => [
+        // Token bot dan email user default dipakai saat Telegram webhook memproses pesan masuk.
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
         'default_user_email' => env('TELEGRAM_DEFAULT_USER_EMAIL', env('BOT_DEFAULT_USER_EMAIL')),
+    ],
+
+    'gemini' => [
+        // API key dan model Gemini dipakai oleh GeminiFinanceMessageParser.
+        'api_key' => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-3.5-flash'),
     ],
 
 ];
