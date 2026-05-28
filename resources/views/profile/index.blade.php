@@ -79,7 +79,7 @@
                         </div>
 
                         <div class="min-w-0 flex-1">
-                            <p class="text-xs font-bold uppercase tracking-[0.16em] text-white/68">Premium Member</p>
+                            {{-- <p class="text-xs font-bold uppercase tracking-[0.16em] text-white/68">Premium Member</p> --}}
                             <h2 id="profile-card-heading" class="mt-1 truncate text-2xl font-extrabold tracking-normal">{{ $displayName }}</h2>
                             <p class="mt-1 truncate text-sm font-semibold text-white/76">{{ $email }}</p>
                         </div>

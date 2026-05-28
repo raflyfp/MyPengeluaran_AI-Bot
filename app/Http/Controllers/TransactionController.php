@@ -140,6 +140,7 @@ class TransactionController extends Controller
             'category' => $this->displayCategoryName($transaction->category?->name),
             'category_id' => $transaction->category_id,
             'time' => $transactionDate->format('H:i'),
+            'date_full' => $transactionDate->format('l, d F Y'),
             'amount' => $this->formatRupiah($transaction->amount, true, $transaction->type),
             'raw_amount' => (float) $transaction->amount,
             'type' => $transaction->type,

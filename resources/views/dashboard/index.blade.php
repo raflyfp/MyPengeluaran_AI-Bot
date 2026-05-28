@@ -18,7 +18,7 @@
                     </div>
 
                     <div>
-                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#485A60]">Good Morning</p>
+                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#485A60]">Welcome back,</p>
                         <h1 class="mt-0.5 text-xl font-extrabold tracking-normal text-[#006C49]">{{ $displayName }}</h1>
                     </div>
                 </div>
@@ -59,13 +59,16 @@
                 @endif
             </x-insight-card>
 
-            <section id="analytics" aria-labelledby="cashflow-heading" x-data="{ period: 'M' }" class="min-w-0 rounded-2xl border border-white bg-white/86 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
+            <section
+                id="analytics"
+                aria-labelledby="cashflow-heading"
+                x-data="{ period: @js($cashflow['default_period']), cashflow: @js($cashflow['periods']) }"
+                class="min-w-0 rounded-2xl border border-white bg-white/86 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl"
+            >
                 <div class="mb-5 flex min-w-0 items-center justify-between gap-4">
                     <div class="min-w-0">
                         <h2 id="cashflow-heading" class="text-xl font-bold tracking-normal text-[#181C1E]">Cashflow</h2>
-                        <p class="mt-1 truncate text-sm font-medium text-[#72777E]">
-                            {{ ($cashflow['has_data'] ?? false) ? '7 hari terakhir dari transaksi real' : 'Belum ada data 7 hari terakhir' }}
-                        </p>
+                        <p class="mt-1 truncate text-sm font-medium text-[#72777E]" x-text="cashflow[period].caption"></p>
                     </div>
 
                     <div class="flex shrink-0 rounded-full bg-[#F2F7F8] p-1">
@@ -85,8 +88,8 @@
                 <figure class="relative h-44 overflow-hidden rounded-2xl bg-gradient-to-b from-[#F7FEFF] to-white">
                     <svg class="h-full w-full" viewBox="0 0 320 176" fill="none" preserveAspectRatio="none" aria-hidden="true">
                         <path d="M24 42H296M24 82H296M24 122H296" stroke="#DCE8EB" stroke-width="1.5" stroke-dasharray="8 8"/>
-                        <polygon points="{{ $cashflow['area_points'] ?? '24,176 24,130 70,104 116,114 162,92 208,124 254,82 296,48 296,176' }}" fill="url(#cashflow-area)"/>
-                        <polyline points="{{ $cashflow['line_points'] ?? '24,130 70,104 116,114 162,92 208,124 254,82 296,48' }}" stroke="#16B69C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polygon :points="cashflow[period].area_points" fill="url(#cashflow-area)"/>
+                        <polyline :points="cashflow[period].line_points" stroke="#16B69C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
                         <defs>
                             <linearGradient id="cashflow-area" x1="160" y1="20" x2="160" y2="176" gradientUnits="userSpaceOnUse">
                                 <stop stop-color="#6FD1D7" stop-opacity="0.34"/>
@@ -94,7 +97,7 @@
                             </linearGradient>
                         </defs>
                     </svg>
-                    <figcaption class="sr-only">Cashflow chart based on the last seven days of transaction data.</figcaption>
+                    <figcaption class="sr-only">Cashflow chart based on the selected period.</figcaption>
                 </figure>
             </section>
 

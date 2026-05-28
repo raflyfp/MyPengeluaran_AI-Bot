@@ -24,7 +24,12 @@
         class="mx-auto min-h-screen max-w-[430px] pb-32 lg:ml-72 lg:mr-0 lg:max-w-none lg:pb-12"
         x-data="{
             editing: null,
+            detail: null,
+            confirmEditSave: false,
+            confirmDelete: false,
             editAction: '',
+            deleteAction: '',
+            pendingDeleteAction: '',
             categories: @js($categoriesForEdit),
             openEdit(transaction) {
                 this.editing = {...transaction};
@@ -34,6 +39,28 @@
             closeEdit() {
                 this.editing = null;
                 this.editAction = '';
+            },
+            openDetail(transaction) {
+                this.detail = {...transaction};
+                this.deleteAction = `/transactions/${transaction.id}`;
+            },
+            closeDetail() {
+                this.detail = null;
+                this.deleteAction = '';
+            },
+            openConfirmSave() {
+                this.confirmEditSave = true;
+            },
+            closeConfirmSave() {
+                this.confirmEditSave = false;
+            },
+            openConfirmDelete(action) {
+                this.pendingDeleteAction = action;
+                this.confirmDelete = true;
+            },
+            closeConfirmDelete() {
+                this.confirmDelete = false;
+                this.pendingDeleteAction = '';
             },
         }"
     >
@@ -132,68 +159,21 @@
 
                         <div class="space-y-4">
                             @foreach ($group['items'] as $transaction)
-                                <div
-                                    class="relative overflow-hidden rounded-2xl"
-                                    x-data="{ open: false, startX: 0 }"
-                                    @keydown.escape.window="open = false"
-                                    @touchstart.passive="startX = $event.changedTouches[0].clientX"
-                                    @touchend.passive="
-                                        const delta = $event.changedTouches[0].clientX - startX;
-                                        if (delta < -36) open = true;
-                                        if (delta > 36) open = false;
-                                    "
+                                <button
+                                    type="button"
+                                    class="w-full text-left"
+                                    @click="openDetail(@js($transaction))"
+                                    aria-label="Open transaction details"
                                 >
-                                    <div class="absolute inset-y-0 right-0 flex w-28 items-center justify-center gap-2 rounded-2xl bg-gradient-to-l from-[#BA1A1A] to-[#0D5DCF] px-3 text-white">
-                                        <button
-                                            type="button"
-                                            class="flex h-10 w-10 items-center justify-center rounded-full bg-white/16 transition hover:bg-white/24 active:scale-95"
-                                            aria-label="Edit transaction"
-                                            @click="openEdit(@js($transaction)); open = false"
-                                        >
-                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                                <path d="m14.5 5.5 4 4M4 20h4l10.5-10.5a2.8 2.8 0 0 0-4-4L4 16v4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
-                                        </button>
-
-                                        <form method="POST" action="{{ route('transactions.destroy', $transaction['id']) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="flex h-10 w-10 items-center justify-center rounded-full bg-white/16 transition hover:bg-white/24 active:scale-95" aria-label="Delete transaction">
-                                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                                    <path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </div>
-
-                                    <div
-                                        class="relative transition duration-300 ease-out"
-                                        :class="open ? '-translate-x-28' : 'translate-x-0'"
-                                        @click.outside="open = false"
-                                    >
-                                        <x-transaction-card
-                                            :title="$transaction['title']"
-                                            :category="$transaction['category']"
-                                            :time="$transaction['time']"
-                                            :amount="$transaction['amount']"
-                                            :type="$transaction['type']"
-                                            :icon="$transaction['icon']"
-                                        >
-                                            <x-slot:actions>
-                                                <button
-                                                    type="button"
-                                                    class="flex h-9 w-9 items-center justify-center rounded-full border border-[#DCE8EB] bg-[#F7FAFC] text-[#093C5D] transition duration-200 hover:bg-[#EAF7F8] active:scale-95"
-                                                    @click.stop="open = true"
-                                                    aria-label="Show transaction actions"
-                                                >
-                                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                                        <path d="M12 6h.01M12 12h.01M12 18h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-                                                    </svg>
-                                                </button>
-                                            </x-slot:actions>
-                                        </x-transaction-card>
-                                    </div>
-                                </div>
+                                    <x-transaction-card
+                                        :title="$transaction['title']"
+                                        :category="$transaction['category']"
+                                        :time="$transaction['time']"
+                                        :amount="$transaction['amount']"
+                                        :type="$transaction['type']"
+                                        :icon="$transaction['icon']"
+                                    />
+                                </button>
                             @endforeach
                         </div>
                     </section>
@@ -239,7 +219,7 @@
                     </button>
                 </div>
 
-                <form method="POST" :action="editAction" class="space-y-4">
+                <form method="POST" :action="editAction" class="space-y-4" x-ref="editForm">
                     @csrf
                     @method('PATCH')
                     <input type="hidden" name="source" :value="editing?.source || 'manual'">
@@ -278,10 +258,131 @@
                         <textarea name="note" rows="3" x-model="editing.note" class="mt-2 w-full resize-none border-0 bg-transparent p-0 text-sm font-semibold text-[#181C1E] placeholder:text-[#72777E] focus:ring-0"></textarea>
                     </label>
 
-                    <button type="submit" class="flex w-full items-center justify-center rounded-full bg-[#093C5D] px-5 py-3.5 text-sm font-extrabold text-white shadow-[0_14px_28px_rgba(9,60,93,0.22)] transition duration-200 hover:bg-[#0C6680] active:scale-[0.98]">
+                    <button type="button" class="flex w-full items-center justify-center rounded-full bg-[#093C5D] px-5 py-3.5 text-sm font-extrabold text-white shadow-[0_14px_28px_rgba(9,60,93,0.22)] transition duration-200 hover:bg-[#0C6680] active:scale-[0.98]" @click="openConfirmSave()">
                         Save Changes
                     </button>
                 </form>
+            </div>
+        </div>
+
+        <div
+            x-cloak
+            x-show="confirmEditSave"
+            x-transition.opacity
+            class="fixed inset-0 z-[95] flex items-end justify-center bg-[#061E2E]/42 px-4 pb-4 backdrop-blur-sm"
+            @keydown.escape.window="closeConfirmSave()"
+        >
+            <div class="w-full max-w-[380px] overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_20px_46px_rgba(9,60,93,0.22)]" x-show="confirmEditSave" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
+                <div class="px-5 py-5">
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#72777E]">Confirm</p>
+                    <h3 class="mt-2 text-lg font-extrabold text-[#093C5D]">Save changes?</h3>
+                    <p class="mt-2 text-sm font-semibold text-[#485A60]">Pastikan detail transaksi sudah benar sebelum disimpan.</p>
+                </div>
+                <div class="flex items-center gap-3 border-t border-[#E7EEF2] bg-[#F7FAFC] px-5 py-4">
+                    <button type="button" class="flex-1 rounded-full border border-[#DCE8EB] bg-white px-4 py-2.5 text-sm font-extrabold text-[#093C5D] transition duration-200 hover:bg-[#EEF4F7]" @click="closeConfirmSave()">Cancel</button>
+                    <button type="button" class="flex-1 rounded-full bg-[#093C5D] px-4 py-2.5 text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(9,60,93,0.18)] transition duration-200 hover:bg-[#0C6680]" @click="closeConfirmSave(); $refs.editForm.submit();">Yes, Save</button>
+                </div>
+            </div>
+        </div>
+
+        <div
+            x-cloak
+            x-show="confirmDelete"
+            x-transition.opacity
+            class="fixed inset-0 z-[96] flex items-end justify-center bg-[#061E2E]/42 px-4 pb-4 backdrop-blur-sm"
+            @keydown.escape.window="closeConfirmDelete()"
+        >
+            <div class="w-full max-w-[380px] overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_20px_46px_rgba(9,60,93,0.22)]" x-show="confirmDelete" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
+                <div class="px-5 py-5">
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#72777E]">Confirm</p>
+                    <h3 class="mt-2 text-lg font-extrabold text-[#093C5D]">Delete transaction?</h3>
+                    <p class="mt-2 text-sm font-semibold text-[#485A60]">Tindakan ini tidak bisa dibatalkan.</p>
+                </div>
+                <div class="flex items-center gap-3 border-t border-[#E7EEF2] bg-[#F7FAFC] px-5 py-4">
+                    <button type="button" class="flex-1 rounded-full border border-[#DCE8EB] bg-white px-4 py-2.5 text-sm font-extrabold text-[#093C5D] transition duration-200 hover:bg-[#EEF4F7]" @click="closeConfirmDelete()">Cancel</button>
+                    <form method="POST" :action="pendingDeleteAction" class="flex-1">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="w-full rounded-full bg-[#BA1A1A] px-4 py-2.5 text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(186,26,26,0.25)] transition duration-200 hover:bg-[#A11616]">Yes, Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div
+            x-cloak
+            x-show="detail"
+            x-transition.opacity
+            class="fixed inset-0 z-[80] flex items-end justify-center bg-[#061E2E]/42 px-4 pb-4 backdrop-blur-sm"
+            @keydown.escape.window="closeDetail()"
+        >
+            <div class="w-full max-w-[430px] overflow-hidden rounded-[1.75rem] border border-white/80 bg-white shadow-[0_24px_54px_rgba(9,60,93,0.24)] lg:max-w-xl" x-show="detail" x-transition:enter="transition ease-out duration-250" x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
+                <div class="flex items-center justify-between border-b border-[#E7EEF2] px-5 py-4">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#72777E]">Detail</p>
+                        <h2 class="mt-1 text-xl font-extrabold text-[#093C5D]" x-text="detail?.title"></h2>
+                    </div>
+                    <button type="button" class="flex h-10 w-10 items-center justify-center rounded-full bg-[#F2F7F8] text-[#093C5D] transition active:scale-95" @click="closeDetail()" aria-label="Close transaction detail">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="space-y-4 px-5 py-5">
+                    <div class="rounded-2xl border border-[#E7EEF2] bg-[#F7FAFC] p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Category</p>
+                                <p class="mt-2 text-lg font-extrabold text-[#093C5D]" x-text="detail?.category"></p>
+                            </div>
+                            <span class="rounded-full px-3 py-1 text-xs font-extrabold" :class="detail?.type === 'income' ? 'bg-[#DFF8F4] text-[#007A53]' : 'bg-[#FFECEB] text-[#BA1A1A]'" x-text="detail?.type === 'income' ? 'Income' : 'Expense'"></span>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Amount</p>
+                                <p class="mt-2 text-lg font-extrabold" :class="detail?.type === 'income' ? 'text-[#007A53]' : 'text-[#BA1A1A]'" x-text="detail?.amount"></p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Date</p>
+                                <p class="mt-2 text-sm font-semibold text-[#485A60]" x-text="detail?.date_full"></p>
+                                <p class="mt-1 text-xs font-semibold text-[#72777E]" x-text="detail?.time"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-[#E7EEF2] bg-white p-4">
+                        <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Note</p>
+                        <p class="mt-2 text-sm font-semibold text-[#181C1E]" x-text="detail?.note || 'No notes added.'"></p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <button
+                            type="button"
+                            class="flex w-full items-center justify-center gap-2 rounded-full bg-[#093C5D] px-4 py-3 text-sm font-extrabold text-white shadow-[0_12px_24px_rgba(9,60,93,0.22)] transition duration-200 hover:bg-[#0C6680] active:scale-[0.98]"
+                            @click="openEdit(detail); closeDetail();"
+                        >
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="m14.5 5.5 4 4M4 20h4l10.5-10.5a2.8 2.8 0 0 0-4-4L4 16v4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Edit
+                        </button>
+
+                        <form method="POST" :action="deleteAction" @submit.prevent="openConfirmDelete(deleteAction)">
+                            @csrf
+                            @method('DELETE')
+                            <button
+                                type="submit"
+                                class="flex w-full items-center justify-center gap-2 rounded-full border border-[#F4B3B3] bg-[#FFECEB] px-4 py-3 text-sm font-extrabold text-[#BA1A1A] transition duration-200 hover:bg-[#FFDAD6] active:scale-[0.98]"
+                            >
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

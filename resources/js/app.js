@@ -39,6 +39,12 @@ const hasChartData = (payload) => {
     return false;
 };
 
+const tooltipXFormatter = (payload) => (value, options) => {
+    const index = options?.dataPointIndex;
+
+    return payload.tooltipLabels?.[index] || value;
+};
+
 const baseChartOptions = {
     chart: {
         fontFamily: 'Inter, sans-serif',
@@ -101,56 +107,80 @@ const chartOptions = {
             },
         },
     }),
-    line: (payload) => ({
+    line: (payload) => {
+        const labels = Array.isArray(payload.labels) ? payload.labels : [];
+        const labelCount = labels.length;
+        const showMarkers = labelCount <= 12;
+
+        return ({
         ...baseChartOptions,
         chart: {
             ...baseChartOptions.chart,
-            type: 'line',
+            type: 'area',
             height: 192,
             parentHeightOffset: 0,
+            dropShadow: {
+                enabled: true,
+                top: 4,
+                blur: 8,
+                color: '#0D8B7D',
+                opacity: 0.3,
+            },
         },
         series: payload.series || [],
-        colors: ['#0D8B7D'],
+        colors: ['#007A53'],
         stroke: {
             curve: 'smooth',
-            width: 4,
+            width: 5,
             lineCap: 'round',
         },
         grid: {
-            borderColor: '#DCE8EB',
+            borderColor: '#CFE0E5',
             strokeDashArray: 6,
-            padding: { top: 8, right: 10, bottom: 0, left: 4 },
+            padding: { top: 14, right: 12, bottom: 8, left: 8 },
         },
         markers: {
-            size: 0,
-            hover: { size: 5 },
+            size: showMarkers ? 4 : 0,
+            colors: ['#FFFFFF'],
+            strokeColors: '#007A53',
+            strokeWidth: 3,
+            hover: { size: 6 },
         },
         xaxis: {
-            categories: payload.labels || [],
+            categories: labels,
             axisBorder: { show: false },
             axisTicks: { show: false },
             labels: {
-                style: {
-                    colors: '#72777E',
-                    fontSize: '11px',
-                    fontWeight: 700,
-                },
+                show: false,
+            },
+        },
+        tooltip: {
+            ...baseChartOptions.tooltip,
+            x: {
+                formatter: tooltipXFormatter(payload),
             },
         },
         yaxis: {
             labels: { show: false },
+            min: 0,
         },
         fill: {
             type: 'gradient',
             gradient: {
                 shadeIntensity: 1,
-                opacityFrom: 0.24,
-                opacityTo: 0,
-                stops: [0, 90, 100],
+                opacityFrom: 0.36,
+                opacityTo: 0.04,
+                stops: [0, 78, 100],
             },
         },
-    }),
-    bar: (payload) => ({
+        });
+    },
+    bar: (payload) => {
+        const labels = Array.isArray(payload.labels) ? payload.labels : [];
+        const labelStep = labels.length > 14 ? Math.ceil(labels.length / 7) : 1;
+        const displayLabels = labels.map((label, index) => (index % labelStep === 0 ? label : ''));
+
+        return ({
         ...baseChartOptions,
         chart: {
             ...baseChartOptions.chart,
@@ -173,7 +203,7 @@ const chartOptions = {
             padding: { top: 8, right: 4, bottom: 0, left: 4 },
         },
         xaxis: {
-            categories: payload.labels || [],
+            categories: displayLabels,
             axisBorder: { show: false },
             axisTicks: { show: false },
             labels: {
@@ -182,6 +212,12 @@ const chartOptions = {
                     fontSize: '11px',
                     fontWeight: 700,
                 },
+            },
+        },
+        tooltip: {
+            ...baseChartOptions.tooltip,
+            x: {
+                formatter: tooltipXFormatter(payload),
             },
         },
         yaxis: {
@@ -196,7 +232,8 @@ const chartOptions = {
             labels: { colors: '#3C4A42' },
             markers: { size: 5, strokeWidth: 0 },
         },
-    }),
+        });
+    },
 };
 
 const initializeApexCharts = async () => {

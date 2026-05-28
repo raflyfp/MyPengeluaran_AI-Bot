@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/analytics', AnalyticsController::class)->name('analytics.index');
+    Route::get('/analytics/export', [AnalyticsController::class, 'export'])->name('analytics.export');
 
     Route::get('/bot', BotController::class)->name('bot.index');
 

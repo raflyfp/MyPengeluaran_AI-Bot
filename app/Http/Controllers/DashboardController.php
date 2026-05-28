@@ -140,27 +140,92 @@ class DashboardController extends Controller
     }
 
     /**
-     * @return array{line_points: string, area_points: string, has_data: bool, labels: array<int, string>}
+     * @return array{default_period: string, periods: array<string, array{line_points: string, area_points: string, has_data: bool, caption: string}>}
      */
     private function cashflowChartData($user): array
     {
-        $start = now()->copy()->subDays(6)->startOfDay();
-        $end = now()->copy()->endOfDay();
+        return [
+            'default_period' => 'M',
+            'periods' => [
+                'W' => $this->cashflowDailyData(
+                    $user,
+                    now()->copy()->subDays(6)->startOfDay(),
+                    now()->copy()->endOfDay(),
+                    '7 hari terakhir dari transaksi real',
+                    'Belum ada data 7 hari terakhir'
+                ),
+                'M' => $this->cashflowDailyData(
+                    $user,
+                    now()->copy()->subDays(29)->startOfDay(),
+                    now()->copy()->endOfDay(),
+                    '30 hari terakhir dari transaksi real',
+                    'Belum ada data 30 hari terakhir'
+                ),
+                'Y' => $this->cashflowMonthlyData(
+                    $user,
+                    now()->copy()->subMonths(11)->startOfMonth(),
+                    now()->copy()->endOfMonth(),
+                    '12 bulan terakhir dari transaksi real',
+                    'Belum ada data 12 bulan terakhir'
+                ),
+            ],
+        ];
+    }
+
+    /**
+     * @return array{line_points: string, area_points: string, has_data: bool, caption: string}
+     */
+    private function cashflowDailyData($user, $start, $end, string $caption, string $emptyCaption): array
+    {
+        $dateExpr = $this->dateGroupExpression('day');
         $rows = Transaction::query()
             ->forUser($user)
             ->betweenDates($start, $end)
-            ->selectRaw('DATE(transactions.transaction_date) as day')
+            ->selectRaw("{$dateExpr} as bucket")
             ->selectRaw("COALESCE(SUM(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE -transactions.amount END), 0) as net_total")
-            ->groupByRaw('DATE(transactions.transaction_date)')
-            ->orderByRaw('DATE(transactions.transaction_date)')
+            ->groupByRaw($dateExpr)
+            ->orderByRaw($dateExpr)
             ->get()
-            ->keyBy(fn ($row): string => CarbonImmutable::parse($row->day)->format('Y-m-d'));
+            ->keyBy(fn ($row): string => CarbonImmutable::parse($row->bucket)->format('Y-m-d'));
 
         $period = collect(CarbonPeriod::create($start, '1 day', $end));
         $values = $period
             ->map(fn ($date): float => (float) ($rows->get($date->format('Y-m-d'))?->net_total ?? 0))
             ->values();
 
+        return $this->buildCashflowChart($values, $caption, $emptyCaption);
+    }
+
+    /**
+     * @return array{line_points: string, area_points: string, has_data: bool, caption: string}
+     */
+    private function cashflowMonthlyData($user, $start, $end, string $caption, string $emptyCaption): array
+    {
+        $monthExpr = $this->dateGroupExpression('month');
+        $rows = Transaction::query()
+            ->forUser($user)
+            ->betweenDates($start, $end)
+            ->selectRaw("{$monthExpr} as bucket")
+            ->selectRaw("COALESCE(SUM(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE -transactions.amount END), 0) as net_total")
+            ->groupByRaw($monthExpr)
+            ->orderByRaw($monthExpr)
+            ->get()
+            ->keyBy(fn ($row): string => CarbonImmutable::parse($row->bucket)->format('Y-m-01'));
+
+        $period = collect(CarbonPeriod::create($start, '1 month', $end));
+        $values = $period
+            ->map(fn ($date): float => (float) ($rows->get($date->format('Y-m-01'))?->net_total ?? 0))
+            ->values();
+
+        return $this->buildCashflowChart($values, $caption, $emptyCaption);
+    }
+
+    /**
+     * @param  Collection<int, float>  $values
+     * @return array{line_points: string, area_points: string, has_data: bool, caption: string}
+     */
+    private function buildCashflowChart(Collection $values, string $caption, string $emptyCaption): array
+    {
         if ($values->every(fn (float $value): bool => $value === 0.0)) {
             $values = collect([0, 8000, 14000, 9000, 18000, 12000, 22000]);
             $hasData = false;
@@ -190,8 +255,27 @@ class DashboardController extends Controller
             'line_points' => $points,
             'area_points' => "{$left},176 {$points} {$right},176",
             'has_data' => $hasData,
-            'labels' => $period->map(fn ($date): string => $date->format('D'))->values()->all(),
+            'caption' => $hasData ? $caption : $emptyCaption,
         ];
+    }
+
+    private function dateGroupExpression(string $granularity): string
+    {
+        if ($granularity === 'month') {
+            $driver = DB::getDriverName();
+
+            if ($driver === 'sqlite') {
+                return "strftime('%Y-%m-01', transactions.transaction_date)";
+            }
+
+            if ($driver === 'pgsql') {
+                return "DATE_TRUNC('month', transactions.transaction_date)";
+            }
+
+            return "DATE_FORMAT(transactions.transaction_date, '%Y-%m-01')";
+        }
+
+        return 'DATE(transactions.transaction_date)';
     }
 
     private function mapCategoryIcon(?string $icon, ?string $categoryName): string
