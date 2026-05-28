@@ -25,7 +25,7 @@
     <div
         class="mx-auto min-h-screen max-w-[430px] pb-32 lg:ml-72 lg:mr-0 lg:max-w-none lg:pb-12"
         x-data="{
-            telegramConnected: @js($telegram['connected']),
+            telegramConnected: @js($telegram['account_connected'] || $telegram['connected']),
             autoCategory: true,
             instantReply: true,
             reviewFailed: true,
@@ -43,7 +43,7 @@
                     aria-label="Open bot status"
                     class="relative flex h-12 w-12 items-center justify-center rounded-full bg-white/76 text-[#093C5D] shadow-[0_10px_24px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:bg-white active:scale-95"
                 >
-                    <span class="absolute right-3 top-3 h-2.5 w-2.5 rounded-full border-2 border-white {{ $telegram['connected'] ? 'bg-[#16B69C]' : 'bg-[#9A5C00]' }}"></span>
+                    <span class="absolute right-3 top-3 h-2.5 w-2.5 rounded-full border-2 border-white {{ ($telegram['account_connected'] || $telegram['connected']) ? 'bg-[#16B69C]' : 'bg-[#9A5C00]' }}"></span>
                     <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M8 9h8M8 13h5M7 18l-4 3V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -63,8 +63,8 @@
                             <h2 id="assistant-status-heading" class="mt-1 text-2xl font-extrabold tracking-normal" x-text="telegramConnected ? 'Telegram online' : 'Waiting for Telegram'"></h2>
                         </div>
                         <span class="inline-flex items-center gap-2 rounded-full bg-white/18 px-3 py-1.5 text-xs font-extrabold backdrop-blur">
-                            <span class="h-2 w-2 rounded-full {{ $telegram['connected'] ? 'bg-[#6FFBBE] shadow-[0_0_18px_rgba(111,251,190,0.9)]' : 'bg-[#FFD87A]' }}"></span>
-                            {{ $telegram['connected'] ? 'Live' : 'Ready' }}
+                            <span class="h-2 w-2 rounded-full {{ ($telegram['account_connected'] || $telegram['connected']) ? 'bg-[#6FFBBE] shadow-[0_0_18px_rgba(111,251,190,0.9)]' : 'bg-[#FFD87A]' }}"></span>
+                            {{ ($telegram['account_connected'] || $telegram['connected']) ? 'Live' : 'Ready' }}
                         </span>
                     </div>
 
@@ -123,6 +123,7 @@
                         </div>
                         <span class="rounded-full bg-[#DFF8F4] px-3 py-1 text-xs font-extrabold text-[#007A53]" x-text="telegramConnected ? 'Active' : 'Paused'"></span>
                     </div>
+
                 </article>
             </section>
 

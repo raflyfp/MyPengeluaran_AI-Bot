@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserStatus;
 use App\Models\Category;
 use App\Models\User;
 use App\Services\EvaFinanceAssistant;
@@ -47,6 +48,8 @@ class TelegramWebhookController extends Controller
         Log::info('Telegram webhook received.', [
             'update_id' => data_get($update, 'update_id'),
             'chat_id' => $chatId,
+            'from_id' => data_get($messagePayload, 'from.id') ?? data_get($callbackPayload, 'from.id'),
+            'username' => data_get($messagePayload, 'from.username') ?? data_get($callbackPayload, 'from.username'),
             'text' => $text,
         ]);
 
@@ -61,6 +64,10 @@ class TelegramWebhookController extends Controller
                 'ignored' => true,
                 'reason' => 'No text message found.',
             ]);
+        }
+
+        if ($this->isCommand($text, 'start') && $this->commandBody($text, 'start') !== '') {
+            return $this->handleTelegramLink($text, $messagePayload, $chatId, $telegram);
         }
 
         // Command bantuan tidak diproses AI, cukup balas panduan singkat Eva.
@@ -91,9 +98,10 @@ class TelegramWebhookController extends Controller
             $telegram->sendMessage($chatId, 'Akun MyPengeluaran belum ditemukan untuk bot ini.');
 
             return response()->json([
-                'ok' => false,
-                'message' => 'No user available for Telegram webhook.',
-            ], 422);
+                'ok' => true,
+                'ignored' => true,
+                'reason' => 'No linked user available for Telegram webhook.',
+            ]);
         }
 
         if ($this->isCommand($text, 'today')) {
@@ -181,6 +189,75 @@ class TelegramWebhookController extends Controller
         }
 
         return hash_equals((string) $secret, (string) $request->header('X-Telegram-Bot-Api-Secret-Token'));
+    }
+
+    private function handleTelegramLink(
+        string $text,
+        array $messagePayload,
+        int|string|null $chatId,
+        TelegramBotClient $telegram,
+    ): JsonResponse {
+        $token = $this->commandBody($text, 'start');
+        $telegramUserId = data_get($messagePayload, 'from.id');
+
+        if (! $telegramUserId) {
+            $telegram->sendMessage($chatId, 'Telegram account belum bisa dibaca. Coba kirim /start ulang.');
+
+            return response()->json([
+                'ok' => true,
+                'linked' => false,
+                'reason' => 'Telegram sender id is missing.',
+            ]);
+        }
+
+        $user = User::query()
+            ->where('telegram_link_token', $token)
+            ->where('is_active', UserStatus::Active->value)
+            ->where(function ($query): void {
+                $query
+                    ->whereNull('telegram_link_token_expires_at')
+                    ->orWhere('telegram_link_token_expires_at', '>', now());
+            })
+            ->first();
+
+        if (! $user) {
+            $telegram->sendMessage($chatId, 'Link Telegram sudah tidak valid. Buka halaman Bot di MyPengeluaran untuk ambil link baru.');
+
+            return response()->json([
+                'ok' => true,
+                'linked' => false,
+                'reason' => 'Telegram link token is invalid or expired.',
+            ]);
+        }
+
+        User::query()
+            ->where('id', '!=', $user->id)
+            ->where(function ($query) use ($telegramUserId, $chatId): void {
+                $query
+                    ->where('telegram_user_id', (string) $telegramUserId)
+                    ->orWhere('telegram_chat_id', (string) $chatId);
+            })
+            ->update([
+                'telegram_user_id' => null,
+                'telegram_chat_id' => null,
+                'telegram_username' => null,
+            ]);
+
+        $user->forceFill([
+            'telegram_user_id' => (string) $telegramUserId,
+            'telegram_chat_id' => $chatId !== null ? (string) $chatId : null,
+            'telegram_username' => data_get($messagePayload, 'from.username'),
+            'telegram_link_token' => null,
+            'telegram_link_token_expires_at' => null,
+        ])->save();
+
+        $telegram->sendMessage($chatId, 'Telegram berhasil tersambung ke akun MyPengeluaran '.$user->email.'.');
+
+        return response()->json([
+            'ok' => true,
+            'linked' => true,
+            'user_id' => $user->id,
+        ]);
     }
 
     private function handleCallback(array $callbackPayload, TelegramUserResolver $userResolver, TelegramBotClient $telegram): JsonResponse

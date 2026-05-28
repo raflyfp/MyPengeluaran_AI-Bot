@@ -22,7 +22,7 @@ Route::post('/telegram/webhook', TelegramWebhookController::class)
 // Alias webhook cadangan kalau nanti provider/tunnel memakai path /webhooks/telegram.
 Route::post('/webhooks/telegram', TelegramWebhookController::class);
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'active', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/analytics', AnalyticsController::class)->name('analytics.index');
@@ -39,9 +39,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->only(['index', 'store', 'update', 'destroy']);
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/telegram', [ProfileController::class, 'disconnectTelegram'])->name('profile.telegram.disconnect');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

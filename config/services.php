@@ -38,6 +38,7 @@ return [
     'telegram' => [
         // Token bot dan email user default dipakai saat Telegram webhook memproses pesan masuk.
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+        'bot_username' => env('TELEGRAM_BOT_USERNAME'),
         'default_user_email' => env('TELEGRAM_DEFAULT_USER_EMAIL', env('BOT_DEFAULT_USER_EMAIL')),
         'webhook_secret' => env('TELEGRAM_WEBHOOK_SECRET'),
     ],

@@ -44,6 +44,8 @@ class BotController extends Controller
                 'parsed_messages' => $parsedMessages,
                 'failed_messages' => $failedMessages,
                 'accuracy' => $totalMessages > 0 ? round(($parsedMessages / $totalMessages) * 100) : 0,
+                'account_connected' => filled($user->telegram_user_id) || filled($user->telegram_chat_id),
+                'username' => $user->telegram_username,
             ],
             'activities' => $latestMessages->map(fn (BotMessage $message): array => $this->formatActivity($message)),
         ]);

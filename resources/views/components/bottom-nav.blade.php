@@ -8,11 +8,7 @@
         ['key' => 'profile', 'label' => 'Profile', 'href' => route('profile.index')],
     ];
 
-    $desktopItems = [
-        ...array_slice($items, 0, 3),
-        ['key' => 'bot', 'label' => 'Bot Assistant', 'href' => route('bot.index')],
-        $items[3],
-    ];
+    $desktopItems = $items;
 @endphp
 
 <nav
@@ -106,11 +102,6 @@
                         <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="M5 20V8M12 20V4M19 20v-9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                             <path d="M3 20h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        @break
-                    @case('bot')
-                        <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M8 9h8M8 13h5M7 18l-4 3V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                         @break
                     @default

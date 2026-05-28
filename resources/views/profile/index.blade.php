@@ -68,6 +68,12 @@
         </header>
 
         <main class="grid gap-7 px-5 pt-28 lg:max-w-7xl lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:pt-36">
+            @if (session('status') === 'telegram-disconnected')
+                <div class="rounded-2xl border border-[#BFEDE5] bg-[#DFF8F4] px-4 py-3 text-sm font-bold text-[#007A53] shadow-[0_10px_24px_rgba(9,60,93,0.06)] lg:col-span-2">
+                    Telegram disconnected.
+                </div>
+            @endif
+
             <section aria-labelledby="profile-card-heading" class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#093C5D] via-[#0C6680] to-[#16B69C] p-5 text-white shadow-[0_22px_44px_rgba(9,60,93,0.22)]">
                 <div class="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-white/14 blur-2xl"></div>
                 <div class="absolute -bottom-16 left-8 h-36 w-36 rounded-full bg-[#6FD1D7]/22 blur-3xl"></div>
@@ -122,10 +128,10 @@
                 </div>
             </section>
 
-            <section aria-labelledby="bot-status-heading" class="space-y-4">
+            <section aria-labelledby="connections-heading" class="space-y-4">
                 <div>
                     <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#72777E]">Connections</p>
-                    <h2 id="bot-status-heading" class="mt-1 text-xl font-bold tracking-normal text-[#181C1E]">Bot Status</h2>
+                    <h2 id="connections-heading" class="mt-1 text-xl font-bold tracking-normal text-[#181C1E]">Connected Accounts</h2>
                 </div>
 
                 <div class="grid gap-4">
@@ -139,14 +145,96 @@
                                 </div>
                                 <div>
                                     <h3 class="text-lg font-extrabold text-[#181C1E]">Telegram</h3>
-                                    <p class="mt-1 text-sm font-semibold text-[#72777E]">{{ $telegramStatus['last_sync'] ?? 'Waiting for first message' }}</p>
+                                    <p class="mt-1 text-sm font-semibold text-[#72777E]">
+                                        @if ($telegramStatus['connected'] ?? false)
+                                            {{ $telegramStatus['username'] ? '@'.$telegramStatus['username'] : 'Telegram linked' }}
+                                        @else
+                                            {{ $telegramStatus['last_sync'] ?? 'Waiting for first message' }}
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
                             <span class="mt-1 inline-flex rounded-full px-3 py-1 text-xs font-extrabold {{ ($telegramStatus['connected'] ?? false) ? 'bg-[#DFF8F4] text-[#007A53]' : 'bg-[#FFF1D9] text-[#9A5C00]' }}">
-                                {{ ($telegramStatus['connected'] ?? false) ? 'Connected' : 'Ready' }}
+                                {{ ($telegramStatus['connected'] ?? false) ? 'Connected' : 'Not linked' }}
                             </span>
                         </div>
+
+                        @if ($telegramStatus['connected'] ?? false)
+                            <div class="mt-4 rounded-2xl border border-[#BFEDE5] bg-[#DFF8F4] p-4">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div>
+                                        <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#007A53]">Last sync</p>
+                                        <p class="mt-1 text-sm font-extrabold text-[#093C5D]">{{ $telegramStatus['last_sync'] ?? 'Waiting for first message' }}</p>
+                                    </div>
+
+                                    <form method="POST" action="{{ route('profile.telegram.disconnect') }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button
+                                            type="submit"
+                                            class="rounded-full border border-[#F4B3B3] bg-white px-4 py-2 text-xs font-extrabold text-[#BA1A1A] transition hover:bg-[#FFF5F5] active:scale-95"
+                                        >
+                                            Disconnect
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @else
+                            <div class="mt-4 rounded-2xl border border-[#DCE8EB] bg-[#F7FAFC] p-4" x-data="{ copied: false, command: @js($telegramStatus['link_command']) }">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Telegram command</p>
+                                        <p class="mt-1 break-all text-sm font-extrabold text-[#093C5D]">{{ $telegramStatus['link_command'] }}</p>
+                                        @if ($telegramStatus['link_expires_at'])
+                                            <p class="mt-1 text-xs font-semibold text-[#72777E]">Valid until {{ $telegramStatus['link_expires_at'] }}</p>
+                                        @endif
+                                    </div>
+
+                                    <div class="flex shrink-0 items-center gap-2">
+                                        <button
+                                            type="button"
+                                            class="flex h-10 min-w-10 items-center justify-center rounded-full border border-[#DCE8EB] bg-white px-3 text-sm font-extrabold text-[#093C5D] transition hover:bg-[#EEF4F7] active:scale-95"
+                                            @click="(navigator.clipboard ? navigator.clipboard.writeText(command) : Promise.resolve()).finally(() => { copied = true; setTimeout(() => copied = false, 1400) })"
+                                            aria-label="Copy Telegram command"
+                                        >
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M8 8V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3M6 9h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                            </svg>
+                                            <span class="ml-2 hidden sm:inline" x-text="copied ? 'Copied' : 'Copy'"></span>
+                                        </button>
+
+                                        @if ($telegramStatus['link_url'])
+                                            <a
+                                                href="{{ $telegramStatus['link_url'] }}"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="rounded-full bg-[#093C5D] px-4 py-2.5 text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(9,60,93,0.18)] transition hover:bg-[#0C6680]"
+                                            >
+                                                Open
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </article>
+
+                    <a href="{{ route('bot.index') }}" class="flex items-center justify-between gap-4 rounded-2xl border border-white/80 bg-white/72 p-4 shadow-[0_16px_34px_rgba(9,60,93,0.08)] backdrop-blur-xl transition hover:opacity-85 active:scale-[0.99]">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-[#EAF7F8] text-[#093C5D]">
+                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M8 9h8M8 13h5M7 18l-4 3V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-extrabold text-[#181C1E]">Bot Assistant</h3>
+                                <p class="mt-1 text-sm font-semibold text-[#72777E]">Activity and automation</p>
+                            </div>
+                        </div>
+                        <svg class="h-5 w-5 shrink-0 text-[#3B7597]" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
                 </div>
             </section>
 

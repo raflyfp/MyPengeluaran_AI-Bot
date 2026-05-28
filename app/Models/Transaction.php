@@ -147,6 +147,8 @@ class Transaction extends Model
     protected function casts(): array
     {
         return [
+            'user_id' => 'integer',
+            'category_id' => 'integer',
             'amount' => 'decimal:2',
             'transaction_date' => 'datetime',
             'deleted_at' => 'datetime',

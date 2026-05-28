@@ -10,6 +10,7 @@ Fokus utama aplikasi:
 - Melihat daftar transaksi, filter, pencarian, dan statistik kategori.
 - Melihat analytics dengan ApexCharts.
 - Memantau aktivitas Telegram bot.
+- Menghubungkan akun web ke Telegram dari menu Profile.
 
 WhatsApp integration saat ini masih diskip dan belum diaktifkan.
 
@@ -145,7 +146,9 @@ Fitur:
 - Savings rate bulanan.
 - Jumlah bot yang aktif.
 - Jumlah transaksi bulan ini.
-- Status Telegram bot.
+- Status koneksi Telegram.
+- Command connect Telegram dengan tombol copy.
+- Akses ke Bot Assistant.
 - Notification toggle UI.
 - Dark mode preview UI.
 - Link edit profile.
@@ -159,7 +162,9 @@ Fitur:
 4. Transaksi masuk ke tabel `transactions`.
 5. Dashboard, Transactions, dan Analytics membaca data user yang sedang login.
 6. User dapat mencari, memfilter, edit, atau delete transaksi.
-7. Jika Telegram webhook aktif, user bisa mengirim pesan ke bot seperti:
+7. User membuka Profile, menyalin command Telegram seperti `/start ABC123XYZ789`, lalu mengirim command tersebut ke bot.
+8. Sistem menghubungkan Telegram `from.id` ke akun user yang sedang login.
+9. Jika Telegram webhook aktif, user bisa mengirim pesan ke bot seperti:
 
 ```text
 makan 25000
@@ -167,8 +172,8 @@ kopi 18rb
 gaji 5000000
 ```
 
-8. Sistem akan parsing nominal, tipe transaksi, kategori, lalu menyimpan transaksi.
-9. Aktivitas Telegram tampil di halaman Bot Assistant.
+10. Sistem akan parsing nominal, tipe transaksi, kategori, lalu menyimpan transaksi.
+11. Aktivitas Telegram tampil di halaman Bot Assistant.
 
 ## Alur Telegram Bot
 
@@ -199,14 +204,15 @@ Alur teknis:
 
 1. Telegram mengirim update ke webhook Laravel.
 2. `TelegramWebhookController` membaca pesan.
-3. Jika pesan `/start` atau `/help`, bot mengirim panduan.
-4. Jika pesan transaksi, `GeminiFinanceMessageParser` mencoba membaca nominal, tipe, note, dan kategori memakai Gemini.
-5. Jika Gemini belum dikonfigurasi atau request gagal, sistem otomatis fallback ke `FinanceMessageParser`.
-6. `TelegramUserResolver` menentukan user tujuan.
-7. `TransactionService` menyimpan data ke:
+3. Jika pesan `/start <token>`, bot menghubungkan akun Telegram ke user pemilik token.
+4. Jika pesan `/start` tanpa token atau `/help`, bot mengirim panduan.
+5. Jika pesan transaksi, `GeminiFinanceMessageParser` mencoba membaca nominal, tipe, note, dan kategori memakai Gemini.
+6. Jika Gemini belum dikonfigurasi atau request gagal, sistem otomatis fallback ke `FinanceMessageParser`.
+7. `TelegramUserResolver` menentukan user tujuan berdasarkan `telegram_user_id` atau `telegram_chat_id`.
+8. `TransactionService` menyimpan data ke:
    - `bot_messages`
    - `transactions`
-8. Bot mengirim balasan konfirmasi ke Telegram, termasuk parser yang dipakai.
+9. Bot mengirim balasan konfirmasi ke Telegram, termasuk parser yang dipakai.
 
 Contoh pesan:
 
@@ -226,6 +232,32 @@ categories
 transactions
 bot_messages
 ```
+
+### users
+
+Field status:
+
+- `is_active` enum `'1'` atau `'0'`
+
+Catatan:
+
+- `1` berarti akun aktif dan bisa login.
+- `0` berarti akun dinonaktifkan, tidak bisa login, dan session lama akan otomatis dikeluarkan.
+- Akun inactive juga tidak bisa menerima transaksi dari Telegram atau melakukan connect ulang.
+
+Field Telegram:
+
+- `telegram_user_id`
+- `telegram_chat_id`
+- `telegram_username`
+- `telegram_link_token`
+- `telegram_link_token_expires_at`
+
+Catatan:
+
+- `telegram_user_id` adalah identitas utama Telegram yang stabil.
+- `telegram_username` hanya untuk label tampilan.
+- `telegram_link_token` dipakai sementara saat user menghubungkan akun dari Profile.
 
 ### categories
 
@@ -295,6 +327,7 @@ app/
   Services/
     FinanceMessageParser.php
     GeminiFinanceMessageParser.php
+    TelegramAccountLink.php
     TelegramBotClient.php
     TelegramUserResolver.php
     TransactionService.php
@@ -364,6 +397,7 @@ DB_USERNAME=
 DB_PASSWORD=
 
 TELEGRAM_BOT_TOKEN=
+TELEGRAM_BOT_USERNAME=
 TELEGRAM_DEFAULT_USER_EMAIL=
 
 GEMINI_API_KEY=
@@ -455,16 +489,42 @@ Jika berhasil:
 - Data transaksi masuk ke `transactions`.
 - Bot membalas pesan konfirmasi.
 - Halaman Bot Assistant menampilkan activity terbaru.
+- Profile menampilkan akun Telegram sebagai connected.
 
 Command bot:
 
 ```text
-/start
+/start <token>
 /help
 /categories
 ```
 
-Command tersebut menampilkan contoh input dan daftar kategori income/expense yang tersedia.
+Command `/start <token>` dipakai untuk menghubungkan akun. Token dibuat dari Profile dan berlaku 30 menit. Command lain menampilkan contoh input dan daftar kategori income/expense yang tersedia.
+
+## Connect Telegram Account
+
+Telegram tidak memakai username sebagai identitas utama karena username bisa kosong dan bisa diganti. Aplikasi menyimpan Telegram `from.id` sebagai `telegram_user_id`, sedangkan username hanya dipakai sebagai label tampilan.
+
+Alur koneksi:
+
+1. Login ke web.
+2. Buka `Profile`.
+3. Di bagian `Connected Accounts`, salin `Telegram command`.
+4. Kirim command tersebut ke bot Telegram.
+5. Setelah bot membalas berhasil tersambung, kirim transaksi seperti `Makan 5k`.
+
+Contoh command:
+
+```text
+/start AbC123xYz789
+```
+
+Token connect:
+
+- Panjang token 12 karakter.
+- Berlaku 30 menit.
+- Jika expired, buka ulang Profile untuk mendapat token baru.
+- Jika `TELEGRAM_BOT_USERNAME` diisi, tombol `Open` akan membuka Telegram langsung dengan token.
 
 ## Setup Gemini AI Parser
 
@@ -512,6 +572,7 @@ GET     /analytics
 GET     /bot
 GET     /profile
 GET     /profile/edit
+DELETE  /profile/telegram
 POST    /telegram/webhook
 POST    /webhooks/telegram
 POST    /logout
@@ -566,9 +627,12 @@ Sudah berjalan:
 - Add transaction modal.
 - Analytics backend query dan ApexCharts.
 - Telegram webhook.
+- Telegram account linking dari Profile.
+- Telegram disconnect dari Profile.
 - Telegram message parsing.
 - Gemini AI parser dengan fallback regex.
 - Bot message logging.
+- Account active/inactive guard berbasis enum `users.is_active`.
 - Profile data dari user login.
 - Mobile-first layout.
 - Desktop responsive sidebar.
@@ -580,7 +644,6 @@ Belum dikerjakan / masih UI-only:
 - Persistent notification setting.
 - Export report PDF/CSV.
 - Category management UI khusus.
-- Telegram account linking berbasis chat ID.
 
 ## GitLab Push
 
