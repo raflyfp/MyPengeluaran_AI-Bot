@@ -25,6 +25,18 @@ class TelegramWebhookController extends Controller
         TransactionService $transactionService,
         TelegramBotClient $telegram,
     ): JsonResponse {
+        if (! $this->hasValidTelegramSecret($request)) {
+            Log::warning('Telegram webhook rejected because secret token is invalid.', [
+                'ip' => $request->ip(),
+                'update_id' => data_get($request->all(), 'update_id'),
+            ]);
+
+            return response()->json([
+                'ok' => false,
+                'message' => 'Invalid Telegram webhook secret.',
+            ], 403);
+        }
+
         // Telegram bisa mengirim message biasa atau edited_message; keduanya diproses sama.
         $update = $request->all();
         $callbackPayload = data_get($update, 'callback_query');
@@ -158,6 +170,17 @@ class TelegramWebhookController extends Controller
             'transaction_id' => $result['transaction']?->id,
             'bot_message_id' => $result['bot_message']->id,
         ]);
+    }
+
+    private function hasValidTelegramSecret(Request $request): bool
+    {
+        $secret = config('services.telegram.webhook_secret');
+
+        if (! $secret) {
+            return true;
+        }
+
+        return hash_equals((string) $secret, (string) $request->header('X-Telegram-Bot-Api-Secret-Token'));
     }
 
     private function handleCallback(array $callbackPayload, TelegramUserResolver $userResolver, TelegramBotClient $telegram): JsonResponse

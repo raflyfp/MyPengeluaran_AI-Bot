@@ -98,14 +98,15 @@ class AnalyticsController extends Controller
     {
         $start = now()->copy()->subMonths($months - 1)->startOfMonth();
         $end = now()->copy()->endOfMonth();
+        $monthExpr = $this->dateGroupExpression('month');
         $rows = Transaction::query()
             ->forUser($user)
             ->ofType('expense')
             ->betweenDates($start, $end)
-            ->selectRaw("date_trunc('month', transactions.transaction_date) as period")
+            ->selectRaw("{$monthExpr} as period")
             ->selectRaw('COALESCE(SUM(transactions.amount), 0) as total')
-            ->groupByRaw("date_trunc('month', transactions.transaction_date)")
-            ->orderByRaw("date_trunc('month', transactions.transaction_date)")
+            ->groupByRaw($monthExpr)
+            ->orderByRaw($monthExpr)
             ->get()
             ->keyBy(fn ($row) => CarbonImmutable::parse($row->period)->format('Y-m'));
 
