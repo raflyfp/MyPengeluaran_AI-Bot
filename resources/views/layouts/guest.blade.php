@@ -23,13 +23,13 @@
                     </div>
 
                     <div class="mt-16">
-                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#3B7597]">Smart finance dashboard</p>
+                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#3B7597]">Smart finance App</p>
                         <h1 class="mt-4 text-5xl font-extrabold leading-tight tracking-normal text-[#093C5D]">Catat uang masuk dan keluar tanpa ribet.</h1>
                         <p class="mt-5 max-w-lg text-base font-medium leading-7 text-[#3C4A42]">Dashboard fintech ringan dengan pencatatan manual, analytics, dan Telegram bot untuk logging transaksi cepat.</p>
                     </div>
                 </div>
 
-                <div class="grid max-w-xl grid-cols-3 gap-4">
+                {{-- <div class="grid max-w-xl grid-cols-3 gap-4">
                     <div class="rounded-2xl border border-white/70 bg-white/68 p-4 shadow-[0_16px_34px_rgba(9,60,93,0.08)] backdrop-blur-xl">
                         <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Balance</p>
                         <p class="mt-2 text-2xl font-extrabold text-[#093C5D]">Live</p>
@@ -42,7 +42,7 @@
                         <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Charts</p>
                         <p class="mt-2 text-2xl font-extrabold text-[#0D5DCF]">Apex</p>
                     </div>
-                </div>
+                </div> --}}
             </section>
 
             <section class="flex min-h-screen items-center justify-center px-5 py-8">

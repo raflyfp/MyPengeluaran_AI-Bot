@@ -180,39 +180,66 @@
                                 </div>
                             </div>
                         @else
-                            <div class="mt-4 rounded-2xl border border-[#DCE8EB] bg-[#F7FAFC] p-4" x-data="{ copied: false, command: @js($telegramStatus['link_command']) }">
-                                <div class="flex items-start justify-between gap-4">
+                            <div class="mt-4 rounded-2xl border border-[#DCE8EB] bg-[#F7FAFC] p-4 sm:p-5" x-data="{ copied: false, command: @js($telegramStatus['link_command']) }">
+                                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                                     <div class="min-w-0">
-                                        <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Telegram command</p>
-                                        <p class="mt-1 break-all text-sm font-extrabold text-[#093C5D]">{{ $telegramStatus['link_command'] }}</p>
-                                        @if ($telegramStatus['link_expires_at'])
-                                            <p class="mt-1 text-xs font-semibold text-[#72777E]">Valid until {{ $telegramStatus['link_expires_at'] }}</p>
-                                        @endif
+                                        <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Connect bot</p>
+                                        <h4 class="mt-1 text-base font-extrabold text-[#181C1E]">Sambungkan Telegram ke akun ini</h4>
+                                        <p class="mt-1 text-sm font-semibold leading-5 text-[#72777E]">Buka bot, tekan Start, lalu kirim command koneksi dari halaman ini.</p>
                                     </div>
 
-                                    <div class="flex shrink-0 items-center gap-2">
+                                    <a
+                                        href="{{ $telegramStatus['link_url'] ?: 'https://t.me/Eclairs11_bot' }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full bg-[#093C5D] px-4 py-3 text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(9,60,93,0.18)] transition hover:bg-[#0C6680] active:scale-[0.98] sm:w-auto"
+                                    >
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <path d="M21 4 3 11.2l6.8 2.4M21 4l-4.8 16-6.4-6.4M21 4 9.8 13.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Open Telegram Bot
+                                    </a>
+                                </div>
+
+                                <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                                    <div class="rounded-xl border border-[#E7EEF2] bg-white/80 p-3">
+                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#E7F3FF] text-xs font-extrabold text-[#1D78C1]">1</span>
+                                        <p class="mt-2 text-xs font-extrabold uppercase tracking-[0.1em] text-[#72777E]">Buka bot</p>
+                                        <p class="mt-1 text-sm font-semibold leading-5 text-[#5B6067]">Tekan tombol Open Telegram Bot.</p>
+                                    </div>
+                                    <div class="rounded-xl border border-[#E7EEF2] bg-white/80 p-3">
+                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#DFF8F4] text-xs font-extrabold text-[#007A53]">2</span>
+                                        <p class="mt-2 text-xs font-extrabold uppercase tracking-[0.1em] text-[#72777E]">Mulai chat</p>
+                                        <p class="mt-1 text-sm font-semibold leading-5 text-[#5B6067]">Tekan Start atau Mulai di Telegram.</p>
+                                    </div>
+                                    <div class="rounded-xl border border-[#E7EEF2] bg-white/80 p-3">
+                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#FFF1D9] text-xs font-extrabold text-[#9A5C00]">3</span>
+                                        <p class="mt-2 text-xs font-extrabold uppercase tracking-[0.1em] text-[#72777E]">Kirim command</p>
+                                        <p class="mt-1 text-sm font-semibold leading-5 text-[#5B6067]">Salin command lalu kirim ke chat bot.</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 rounded-xl border border-[#DCE8EB] bg-white/90 p-3">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="min-w-0">
+                                            <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Telegram command</p>
+                                            <p class="mt-1 break-all font-mono text-sm font-extrabold text-[#093C5D]">{{ $telegramStatus['link_command'] }}</p>
+                                            @if ($telegramStatus['link_expires_at'])
+                                                <p class="mt-1 text-xs font-semibold text-[#72777E]">Valid until {{ $telegramStatus['link_expires_at'] }}</p>
+                                            @endif
+                                        </div>
+
                                         <button
                                             type="button"
-                                            class="flex h-10 min-w-10 items-center justify-center rounded-full border border-[#DCE8EB] bg-white px-3 text-sm font-extrabold text-[#093C5D] transition hover:bg-[#EEF4F7] active:scale-95"
+                                            class="flex h-11 shrink-0 items-center justify-center gap-2 rounded-full border border-[#DCE8EB] bg-white px-4 text-sm font-extrabold text-[#093C5D] transition hover:bg-[#EEF4F7] active:scale-95"
                                             @click="(navigator.clipboard ? navigator.clipboard.writeText(command) : Promise.resolve()).finally(() => { copied = true; setTimeout(() => copied = false, 1400) })"
                                             aria-label="Copy Telegram command"
                                         >
                                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                                 <path d="M8 8V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3M6 9h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                                             </svg>
-                                            <span class="ml-2 hidden sm:inline" x-text="copied ? 'Copied' : 'Copy'"></span>
+                                            <span x-text="copied ? 'Copied' : 'Copy'"></span>
                                         </button>
-
-                                        @if ($telegramStatus['link_url'])
-                                            <a
-                                                href="{{ $telegramStatus['link_url'] }}"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                class="rounded-full bg-[#093C5D] px-4 py-2.5 text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(9,60,93,0.18)] transition hover:bg-[#0C6680]"
-                                            >
-                                                Open
-                                            </a>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
