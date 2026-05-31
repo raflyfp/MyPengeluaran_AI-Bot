@@ -75,7 +75,7 @@
     class="fixed bottom-6 left-6 top-6 z-50 hidden w-60 flex-col rounded-[2rem] border border-white/70 bg-white/72 p-4 shadow-[0_24px_60px_rgba(9,60,93,0.12)] backdrop-blur-2xl lg:flex"
 >
     <div class="mb-8 rounded-2xl bg-[#B8336A] p-5 text-white shadow-[0_14px_28px_rgba(184,51,106,0.16)]">
-        <p class="text-xs font-bold uppercase tracking-[0.16em] text-white/70">Pastel OS</p>
+        <x-application-logo class="mb-4 h-12 w-12 rounded-full object-cover ring-2 ring-white/50" />
         <h2 class="mt-2 text-2xl font-extrabold tracking-normal">MyPengeluaran</h2>
     </div>
 

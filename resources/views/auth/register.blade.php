@@ -8,7 +8,7 @@
     <form method="POST" action="{{ route('register') }}" class="space-y-4">
         @csrf
 
-        <label for="name" class="block rounded-2xl border border-[#E7EEF2] bg-[#F7FAFC] p-4 focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
+        <label for="name" class="block rounded-2xl border border-[#E7EEF2] bg-[#F7FAFC] p-4 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)] focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
             <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Name</span>
             <input
                 id="name"
@@ -24,7 +24,7 @@
         </label>
         <x-input-error :messages="$errors->get('name')" class="mt-2" />
 
-        <label for="email" class="block rounded-2xl border border-[#E7EEF2] bg-[#F7FAFC] p-4 focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
+        <label for="email" class="block rounded-2xl border border-[#E7EEF2] bg-[#F7FAFC] p-4 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)] focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
             <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Email</span>
             <input
                 id="email"
@@ -39,7 +39,7 @@
         </label>
         <x-input-error :messages="$errors->get('email')" class="mt-2" />
 
-        <label for="password" class="block rounded-2xl border border-[#E7EEF2] bg-[#F7FAFC] p-4 focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
+        <label for="password" class="block rounded-2xl border border-[#E7EEF2] bg-[#F7FAFC] p-4 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)] focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
             <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Password</span>
             <input
                 id="password"
@@ -53,7 +53,7 @@
         </label>
         <x-input-error :messages="$errors->get('password')" class="mt-2" />
 
-        <label for="password_confirmation" class="block rounded-2xl border border-[#E7EEF2] bg-[#F7FAFC] p-4 focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
+        <label for="password_confirmation" class="block rounded-2xl border border-[#E7EEF2] bg-[#F7FAFC] p-4 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)] focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
             <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Confirm Password</span>
             <input
                 id="password_confirmation"
@@ -75,7 +75,7 @@
         </button>
     </form>
 
-    <div class="mt-5 rounded-2xl border border-[#D9E8ED] bg-white/70 p-4 text-center">
+    <div class="mt-5 rounded-2xl border border-[#D9E8ED] bg-white/70 p-4 text-center transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(9,60,93,0.1)]">
         <p class="text-sm font-semibold text-[#72777E]">Sudah punya akun?</p>
         <a
             href="{{ route('login') }}"

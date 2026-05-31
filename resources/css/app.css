@@ -153,3 +153,244 @@
 [class*="bg-gradient-to-"][class*="from-[#F7FEFF]"] {
     background-color: #ffffff !important;
 }
+
+.app-dark {
+    background-color: #2b2530 !important;
+    color: #f6edf2 !important;
+}
+
+.app-dark .eva-shell,
+.app-dark main {
+    background-color: #2b2530 !important;
+}
+
+.app-dark header,
+.app-dark nav,
+.app-dark aside {
+    background-color: rgba(54, 45, 58, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.app-dark section,
+.app-dark article,
+.app-dark a,
+.app-dark div {
+    border-color: rgba(255, 255, 255, 0.11) !important;
+}
+
+.app-dark article,
+.app-dark [class*="bg-white"],
+.app-dark [class*="bg-[#F7FAFC]"],
+.app-dark [class*="bg-[#FFF7EA]"],
+.app-dark [class*="bg-[#EAF7F8]"],
+.app-dark [class*="bg-[#EAF3F6]"],
+.app-dark [class*="bg-[#F2F7F8]"],
+.app-dark [class*="bg-[#F7FEFF]"] {
+    background-color: rgba(63, 53, 67, 0.94) !important;
+}
+
+.app-dark input,
+.app-dark select,
+.app-dark textarea {
+    background-color: rgba(48, 40, 52, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+    color: #f6edf2 !important;
+}
+
+.app-dark input::placeholder,
+.app-dark textarea::placeholder {
+    color: #cdb9c3 !important;
+}
+
+.app-dark [class*="text-[#181C1E]"],
+.app-dark [class*="text-[#4B2735]"],
+.app-dark [class*="text-[#093C5D]"],
+.app-dark [class*="text-[#B8336A]"],
+.app-dark [class*="text-[#3A4A4D]"],
+.app-dark [class*="text-[#3C4A42]"],
+.app-dark [class*="text-[#684C59]"],
+.app-dark h1,
+.app-dark h2,
+.app-dark h3,
+.app-dark h4 {
+    color: #fff8fb !important;
+}
+
+.app-dark [class*="text-[#72777E]"],
+.app-dark [class*="text-[#9B7A82]"],
+.app-dark [class*="text-[#485A60]"],
+.app-dark [class*="text-[#9A6275]"],
+.app-dark [class*="text-[#5B6067]"],
+.app-dark [class*="text-[#8A6A75]"],
+.app-dark p {
+    color: #eadde4 !important;
+}
+
+.app-dark [class*="tracking-"],
+.app-dark label,
+.app-dark legend,
+.app-dark span {
+    color: #e7d5df !important;
+}
+
+.app-dark strong,
+.app-dark [class*="font-extrabold"],
+.app-dark [class*="font-bold"] {
+    color: #fff8fb !important;
+}
+
+.app-dark input,
+.app-dark select,
+.app-dark textarea,
+.app-dark option {
+    color: #fff8fb !important;
+}
+
+.app-dark [class*="text-[#007A53]"],
+.app-dark [class*="text-[#2E9F86]"] {
+    color: #b8f3d2 !important;
+}
+
+.app-dark [class*="text-[#BA1A1A]"],
+.app-dark [class*="text-[#D93662]"] {
+    color: #ffbfd1 !important;
+}
+
+.app-dark [class*="text-[#9A5C00]"],
+.app-dark [class*="text-[#B96F00]"] {
+    color: #ffe2a3 !important;
+}
+
+.app-dark [class*="bg-[#DFF8F4]"],
+.app-dark [class*="bg-[#DDF8E8]"] {
+    background-color: rgba(55, 105, 83, 0.38) !important;
+}
+
+.app-dark [class*="bg-[#FFF1D9]"],
+.app-dark [class*="bg-[#FFF2C8]"] {
+    background-color: rgba(122, 93, 40, 0.36) !important;
+}
+
+.app-dark [class*="bg-[#FFECEB]"],
+.app-dark [class*="bg-[#FFF5F5]"],
+.app-dark [class*="bg-[#FFE4EF]"] {
+    background-color: rgba(126, 54, 78, 0.34) !important;
+}
+
+.app-dark button:not([type="submit"]),
+.app-dark .rounded-full.bg-white {
+    color: #f6edf2 !important;
+}
+
+.app-dark [class*="shadow-"] {
+    --tw-shadow-color: rgba(28, 18, 27, 0.24) !important;
+}
+
+.app-dark svg {
+    color: currentColor;
+}
+
+.add-transaction-sheet {
+    background-color: #ffffff !important;
+}
+
+.add-transaction-sheet h2,
+.add-transaction-sheet #add-transaction-title {
+    color: #b8336a !important;
+}
+
+.add-transaction-sheet legend,
+.add-transaction-sheet label > span,
+.add-transaction-sheet p.text-xs,
+.add-transaction-sheet .text-xs {
+    color: #7a455a !important;
+}
+
+.add-transaction-sheet input,
+.add-transaction-sheet select,
+.add-transaction-sheet textarea {
+    color: #3f2430 !important;
+}
+
+.add-transaction-sheet input::placeholder,
+.add-transaction-sheet textarea::placeholder {
+    color: #9d7787 !important;
+    opacity: 1 !important;
+}
+
+.add-transaction-sheet [class*="text-[#093C5D]"],
+.add-transaction-sheet [class*="text-[#181C1E]"],
+.add-transaction-sheet [class*="text-[#3C4A42]"] {
+    color: #3f2430 !important;
+}
+
+.app-dark .add-transaction-sheet {
+    background-color: #463845 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.app-dark .add-transaction-sheet h2,
+.app-dark .add-transaction-sheet #add-transaction-title {
+    color: #ff8fbd !important;
+}
+
+.app-dark .add-transaction-sheet legend,
+.app-dark .add-transaction-sheet label > span,
+.app-dark .add-transaction-sheet p.text-xs,
+.app-dark .add-transaction-sheet .text-xs {
+    color: #f0dce7 !important;
+}
+
+.app-dark .add-transaction-sheet input,
+.app-dark .add-transaction-sheet select,
+.app-dark .add-transaction-sheet textarea,
+.app-dark .add-transaction-sheet [class*="bg-[#F7FAFC]"] {
+    background-color: #fffafc !important;
+    color: #3f2430 !important;
+    border-color: #f0bdd0 !important;
+}
+
+.app-dark .add-transaction-sheet input::placeholder,
+.app-dark .add-transaction-sheet textarea::placeholder {
+    color: #9d7787 !important;
+}
+
+.app-dark .add-transaction-sheet [class*="text-[#093C5D]"],
+.app-dark .add-transaction-sheet [class*="text-[#181C1E]"],
+.app-dark .add-transaction-sheet [class*="text-[#3C4A42]"] {
+    color: #3f2430 !important;
+}
+
+.app-dark .add-transaction-sheet button[type="submit"] {
+    background-color: #c33272 !important;
+    color: #ffffff !important;
+}
+
+.app-dark .finance-balance-card {
+    background-color: #4a3443 !important;
+    box-shadow: 0 18px 34px rgba(20, 12, 19, 0.28) !important;
+    --tw-ring-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.app-dark .finance-balance-card [class*="bg-white/12"] {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.app-dark .finance-balance-card [class*="bg-white/14"],
+.app-dark .finance-balance-card [class*="bg-white/20"] {
+    background-color: rgba(255, 255, 255, 0.13) !important;
+}
+
+.app-dark .finance-balance-card [class*="text-white/"] {
+    color: #f3dfe9 !important;
+}
+
+.app-dark .finance-balance-card p,
+.app-dark .finance-balance-card span,
+.app-dark .finance-balance-card h2 {
+    color: #fff7fb !important;
+}
+
+.app-dark .finance-balance-card svg {
+    color: currentColor !important;
+}

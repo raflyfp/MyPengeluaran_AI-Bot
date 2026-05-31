@@ -51,8 +51,8 @@
             </div>
         </header>
 
-        <main class="grid gap-7 px-5 pt-28 lg:max-w-7xl lg:grid-cols-[0.95fr_1.05fr] lg:px-8 lg:pt-36">
-            <section aria-labelledby="assistant-status-heading" class="relative overflow-hidden rounded-2xl bg-[#B8336A] p-5 text-white shadow-[0_18px_34px_rgba(184,51,106,0.18)]">
+        <main class="grid gap-7 px-5 pt-28 lg:items-start lg:gap-6 lg:max-w-7xl lg:grid-cols-[0.95fr_1.05fr] lg:px-6 lg:pt-32">
+            <section aria-labelledby="assistant-status-heading" class="relative overflow-hidden rounded-2xl bg-[#B8336A] p-5 text-white shadow-[0_18px_34px_rgba(184,51,106,0.18)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(184,51,106,0.24)]">
                 <div class="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-white/14 blur-2xl"></div>
                 <div class="absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-[#7EC7E8]/20 blur-3xl"></div>
 
@@ -69,15 +69,15 @@
                     </div>
 
                     <div class="grid grid-cols-3 gap-3">
-                        <div class="rounded-2xl bg-white/12 p-3 backdrop-blur">
+                        <div class="rounded-2xl bg-white/12 p-3 backdrop-blur transition duration-200 hover:bg-white/18 hover:-translate-y-0.5">
                             <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-white/65">Synced</p>
                             <p class="mt-2 text-xl font-extrabold">{{ $telegram['total_messages'] }}</p>
                         </div>
-                        <div class="rounded-2xl bg-white/12 p-3 backdrop-blur">
+                        <div class="rounded-2xl bg-white/12 p-3 backdrop-blur transition duration-200 hover:bg-white/18 hover:-translate-y-0.5">
                             <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-white/65">Accuracy</p>
                             <p class="mt-2 text-xl font-extrabold">{{ $telegram['accuracy'] }}%</p>
                         </div>
-                        <div class="rounded-2xl bg-white/12 p-3 backdrop-blur">
+                        <div class="rounded-2xl bg-white/12 p-3 backdrop-blur transition duration-200 hover:bg-white/18 hover:-translate-y-0.5">
                             <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-white/65">Review</p>
                             <p class="mt-2 text-xl font-extrabold">{{ $telegram['failed_messages'] }}</p>
                         </div>
@@ -91,7 +91,7 @@
                     <h2 id="integration-heading" class="mt-1 text-xl font-bold tracking-normal text-[#4B2735]">Telegram Integration</h2>
                 </div>
 
-                <article class="rounded-2xl border border-white/80 bg-white/76 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
+                <article class="rounded-2xl border border-white/80 bg-white/76 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(9,60,93,0.12)]">
                     <div class="flex items-start justify-between gap-4">
                         <div class="flex items-center gap-4">
                             <div class="flex h-14 w-14 items-center justify-center rounded-full bg-[#EAF2FF] text-[#5B8FE6]">
@@ -107,7 +107,7 @@
 
                         <button
                             type="button"
-                            class="relative h-8 w-14 rounded-full transition duration-200"
+                            class="relative h-8 w-14 rounded-full transition duration-200 hover:brightness-105 active:scale-95"
                             :class="telegramConnected ? 'bg-[#2E9F86]' : 'bg-[#F5C9D6]'"
                             @click="telegramConnected = ! telegramConnected"
                             aria-label="Toggle Telegram visual status"
@@ -116,7 +116,7 @@
                         </button>
                     </div>
 
-                    <div class="mt-5 flex items-center justify-between rounded-2xl bg-[#FFF7EA] p-4">
+                    <div class="mt-5 flex items-center justify-between rounded-2xl bg-[#FFF7EA] p-4 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)]">
                         <div>
                             <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Last sync</p>
                             <p class="mt-1 text-sm font-extrabold text-[#B8336A]">{{ $telegram['last_sync'] }}</p>
@@ -127,15 +127,15 @@
                 </article>
             </section>
 
-            <section aria-labelledby="preview-heading" class="rounded-2xl border border-white/80 bg-white/72 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
+            <section aria-labelledby="preview-heading" class="rounded-2xl border border-white/80 bg-white/72 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(9,60,93,0.12)]">
                 <h2 id="preview-heading" class="text-xl font-bold tracking-normal text-[#4B2735]">Expense Logging Preview</h2>
 
                 <div class="mt-5 space-y-4">
-                    <div class="max-w-[82%] rounded-2xl rounded-bl-md bg-[#FFF2C8] p-4">
+                    <div class="max-w-[82%] rounded-2xl rounded-bl-md bg-[#FFF2C8] p-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(9,60,93,0.1)]">
                         <p class="text-sm font-semibold leading-6 text-[#5C3E4B]">kopi 18rb</p>
                     </div>
 
-                    <div class="ml-auto max-w-[88%] rounded-2xl rounded-br-md bg-[#B8336A] p-4 text-white shadow-[0_14px_30px_rgba(184,51,106,0.16)]">
+                    <div class="ml-auto max-w-[88%] rounded-2xl rounded-br-md bg-[#B8336A] p-4 text-white shadow-[0_14px_30px_rgba(184,51,106,0.16)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_38px_rgba(184,51,106,0.2)]">
                         <p class="text-sm font-bold">Logged as Food & Drink</p>
                         <div class="mt-3 grid grid-cols-2 gap-3 text-xs">
                             <div class="rounded-xl bg-white/14 p-3">
@@ -159,7 +159,7 @@
 
                 <div class="space-y-3">
                     @foreach ($automations as $automation)
-                        <article class="flex items-center justify-between gap-4 rounded-2xl border border-white/80 bg-white/72 p-4 shadow-[0_14px_30px_rgba(9,60,93,0.07)] backdrop-blur-xl">
+                        <article class="flex items-center justify-between gap-4 rounded-2xl border border-white/80 bg-white/72 p-4 shadow-[0_14px_30px_rgba(9,60,93,0.07)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_38px_rgba(9,60,93,0.11)]">
                             <div class="min-w-0">
                                 <h3 class="text-base font-extrabold text-[#4B2735]">{{ $automation['title'] }}</h3>
                                 <p class="mt-1 text-sm font-medium leading-5 text-[#9B7A82]">{{ $automation['caption'] }}</p>
@@ -167,7 +167,7 @@
 
                             <button
                                 type="button"
-                                class="relative h-8 w-14 shrink-0 rounded-full transition duration-200"
+                                class="relative h-8 w-14 shrink-0 rounded-full transition duration-200 hover:brightness-105 active:scale-95"
                                 :class="{{ $automation['key'] }} ? 'bg-[#2E9F86]' : 'bg-[#F5C9D6]'"
                                 @click="{{ $automation['key'] }} = ! {{ $automation['key'] }}"
                                 aria-label="Toggle {{ $automation['title'] }}"
@@ -190,7 +190,7 @@
 
                 <div class="space-y-3">
                     @forelse ($activities as $activity)
-                        <article class="rounded-2xl border border-[#F8D9E3] bg-white p-4 shadow-[0_8px_22px_rgba(9,60,93,0.06)]">
+                        <article class="rounded-2xl border border-[#F8D9E3] bg-white p-4 shadow-[0_8px_22px_rgba(9,60,93,0.06)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_30px_rgba(9,60,93,0.1)]">
                             <div class="flex items-start justify-between gap-4">
                                 <div class="min-w-0">
                                     <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">{{ $activity['channel'] }} &bull; {{ $activity['time'] }}</p>
@@ -201,7 +201,7 @@
                             </div>
                         </article>
                     @empty
-                        <article class="rounded-2xl border border-white/80 bg-white/76 p-5 text-center shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
+                        <article class="rounded-2xl border border-white/80 bg-white/76 p-5 text-center shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(9,60,93,0.12)]">
                             <p class="text-lg font-extrabold text-[#B8336A]">No Telegram activity yet</p>
                             <p class="mt-2 text-sm font-semibold leading-6 text-[#9B7A82]">Send a message to the bot and this timeline will update from the database.</p>
                         </article>

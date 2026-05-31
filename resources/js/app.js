@@ -111,6 +111,8 @@ const chartOptions = {
         const labels = Array.isArray(payload.labels) ? payload.labels : [];
         const labelCount = labels.length;
         const showMarkers = labelCount <= 12;
+        const labelStep = labels.length > 12 ? Math.ceil(labels.length / 7) : 1;
+        const displayLabels = labels.map((label, index) => (index % labelStep === 0 ? label : ''));
 
         return ({
         ...baseChartOptions,
@@ -137,7 +139,7 @@ const chartOptions = {
         grid: {
             borderColor: '#CFE0E5',
             strokeDashArray: 6,
-            padding: { top: 14, right: 12, bottom: 8, left: 8 },
+            padding: { top: 14, right: 12, bottom: 10, left: 8 },
         },
         markers: {
             size: showMarkers ? 4 : 0,
@@ -147,11 +149,16 @@ const chartOptions = {
             hover: { size: 6 },
         },
         xaxis: {
-            categories: labels,
+            categories: displayLabels,
             axisBorder: { show: false },
             axisTicks: { show: false },
             labels: {
-                show: false,
+                show: true,
+                style: {
+                    colors: '#72777E',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                },
             },
         },
         tooltip: {

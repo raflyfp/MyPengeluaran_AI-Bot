@@ -19,13 +19,16 @@
         close() {
             this.open = false;
             document.body.classList.remove('overflow-hidden');
+            this.$dispatch('bottom-nav-visibility', { hidden: false });
         },
         show() {
             this.open = true;
             document.body.classList.add('overflow-hidden');
+            this.$dispatch('bottom-nav-visibility', { hidden: true });
             this.$nextTick(() => this.$refs.amount?.focus());
         }
     }"
+    x-init="if (open) { document.body.classList.add('overflow-hidden'); $dispatch('bottom-nav-visibility', { hidden: true }); }"
     x-on:open-add-transaction.window="show()"
     x-on:keydown.escape.window="close()"
     x-effect="open ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')"
@@ -34,7 +37,7 @@
     <div
         x-show="open"
         x-transition.opacity.duration.200ms
-        class="fixed inset-0 z-[70] bg-[#031E2F]/45 backdrop-blur-sm"
+        class="fixed inset-0 z-[1000] bg-[#031E2F]/45 backdrop-blur-sm"
         aria-hidden="true"
         @click="close()"
     ></div>
@@ -50,7 +53,7 @@
         role="dialog"
         aria-modal="true"
         aria-labelledby="add-transaction-title"
-        class="fixed inset-x-0 bottom-0 z-[80] mx-auto max-w-[430px] rounded-t-[2rem] border border-white/70 bg-white/92 px-5 pb-6 pt-3 shadow-[0_-24px_60px_rgba(9,60,93,0.22)] backdrop-blur-2xl lg:bottom-8 lg:max-w-xl lg:rounded-[2rem]"
+        class="add-transaction-sheet fixed inset-x-0 bottom-0 z-[1100] mx-auto max-h-[calc(100vh-1rem)] max-w-[430px] overflow-y-auto rounded-t-[2rem] border border-[#F0BDD0] bg-white px-5 pb-8 pt-3 shadow-[0_-24px_60px_rgba(9,60,93,0.22)] transition duration-200 hover:shadow-[0_-30px_70px_rgba(9,60,93,0.26)] lg:bottom-8 lg:max-h-[calc(100vh-4rem)] lg:max-w-xl lg:rounded-[2rem]"
     >
         <div class="mx-auto mb-5 h-1.5 w-12 rounded-full bg-[#D8E4E8]"></div>
 
@@ -78,7 +81,7 @@
 
             <fieldset>
                 <legend class="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Transaction Type</legend>
-                <div class="grid grid-cols-2 gap-2 rounded-2xl bg-[#F2F7F8] p-1">
+                <div class="grid grid-cols-2 gap-2 rounded-2xl bg-[#F2F7F8] p-1 transition duration-200 hover:shadow-[0_8px_18px_rgba(9,60,93,0.08)]">
                     <label class="cursor-pointer">
                         <input x-model="type" type="radio" name="type" value="expense" class="sr-only">
                         <span
@@ -105,7 +108,7 @@
 
             <label class="block">
                 <span class="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Amount</span>
-                <div class="flex h-14 items-center gap-3 rounded-2xl border border-[#DCE8EB] bg-[#F7FAFC] px-4 focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
+                <div class="flex h-14 items-center gap-3 rounded-2xl border border-[#DCE8EB] bg-[#F7FAFC] px-4 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)] focus-within:border-[#6FD1D7] focus-within:ring-2 focus-within:ring-[#6FD1D7]/30">
                     <span class="text-sm font-extrabold text-[#093C5D]">Rp</span>
                     <input
                         x-ref="amount"
@@ -131,7 +134,7 @@
                     x-show="type === 'expense'"
                     :disabled="type !== 'expense'"
                     name="category_id"
-                    class="h-14 w-full rounded-2xl border-[#DCE8EB] bg-[#F7FAFC] text-base font-bold text-[#181C1E] focus:border-[#6FD1D7] focus:ring-[#6FD1D7]/40"
+                    class="h-14 w-full rounded-2xl border-[#DCE8EB] bg-[#F7FAFC] text-base font-bold text-[#181C1E] transition duration-200 hover:shadow-[0_10px_22px_rgba(9,60,93,0.08)] focus:border-[#6FD1D7] focus:ring-[#6FD1D7]/40"
                 >
                     <option value="">Choose expense category</option>
                     @foreach ($expenseCategories as $category)
@@ -143,7 +146,7 @@
                     x-show="type === 'income'"
                     :disabled="type !== 'income'"
                     name="category_id"
-                    class="h-14 w-full rounded-2xl border-[#DCE8EB] bg-[#F7FAFC] text-base font-bold text-[#181C1E] focus:border-[#6FD1D7] focus:ring-[#6FD1D7]/40"
+                    class="h-14 w-full rounded-2xl border-[#DCE8EB] bg-[#F7FAFC] text-base font-bold text-[#181C1E] transition duration-200 hover:shadow-[0_10px_22px_rgba(9,60,93,0.08)] focus:border-[#6FD1D7] focus:ring-[#6FD1D7]/40"
                 >
                     <option value="">Choose income category</option>
                     @foreach ($incomeCategories as $category)
@@ -166,7 +169,7 @@
                     type="datetime-local"
                     name="transaction_date"
                     value="{{ old('transaction_date', now()->format('Y-m-d\TH:i')) }}"
-                    class="h-14 w-full rounded-2xl border-[#DCE8EB] bg-[#F7FAFC] text-base font-bold text-[#181C1E] focus:border-[#6FD1D7] focus:ring-[#6FD1D7]/40"
+                    class="h-14 w-full rounded-2xl border-[#DCE8EB] bg-[#F7FAFC] text-base font-bold text-[#181C1E] transition duration-200 hover:shadow-[0_10px_22px_rgba(9,60,93,0.08)] focus:border-[#6FD1D7] focus:ring-[#6FD1D7]/40"
                 >
                 @error('transaction_date')
                     <p class="mt-2 text-sm font-semibold text-[#BA1A1A]">{{ $message }}</p>
@@ -179,7 +182,7 @@
                     name="note"
                     rows="3"
                     placeholder="Example: Kopi Kenangan after meeting"
-                    class="w-full resize-none rounded-2xl border-[#DCE8EB] bg-[#F7FAFC] text-base font-semibold text-[#181C1E] placeholder:text-[#A5B2B7] focus:border-[#6FD1D7] focus:ring-[#6FD1D7]/40"
+                    class="w-full resize-none rounded-2xl border-[#DCE8EB] bg-[#F7FAFC] text-base font-semibold text-[#181C1E] placeholder:text-[#A5B2B7] transition duration-200 hover:shadow-[0_10px_22px_rgba(9,60,93,0.08)] focus:border-[#6FD1D7] focus:ring-[#6FD1D7]/40"
                 >{{ old('note') }}</textarea>
                 @error('note')
                     <p class="mt-2 text-sm font-semibold text-[#BA1A1A]">{{ $message }}</p>

@@ -13,8 +13,8 @@
         <header class="fixed inset-x-0 top-0 z-40 mx-auto w-full max-w-[430px] border-b border-white/70 bg-[#FFF7EA]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl lg:left-72 lg:right-6 lg:top-6 lg:mx-0 lg:max-w-none lg:rounded-[1.75rem] lg:border lg:px-8">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-[#B8336A] text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(184,51,106,0.16)]">
-                        {{ $initials ?: 'U' }}
+                    <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-white text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(184,51,106,0.16)]">
+                        <x-application-logo class="h-full w-full object-cover" />
                     </div>
 
                     <div>
@@ -36,7 +36,7 @@
             </div>
         </header>
 
-        <main class="grid min-w-0 gap-8 px-5 pt-28 lg:max-w-7xl lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:px-8 lg:pt-36">
+        <main class="grid min-w-0 gap-8 px-5 pt-28 lg:items-start lg:gap-6 lg:max-w-7xl lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:px-6 lg:pt-32">
             <section aria-labelledby="balance-heading" class="min-w-0 space-y-4">
                 <x-balance-card
                     label="Total Balance"
@@ -63,7 +63,7 @@
                 id="analytics"
                 aria-labelledby="cashflow-heading"
                 x-data="{ period: @js($cashflow['default_period']), cashflow: @js($cashflow['periods']) }"
-                class="min-w-0 rounded-2xl border border-white bg-white/86 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl"
+                class="min-w-0 rounded-2xl border border-white bg-white/86 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(9,60,93,0.12)]"
             >
                 <div class="mb-5 flex min-w-0 items-center justify-between gap-4">
                     <div class="min-w-0">
@@ -118,7 +118,7 @@
                             :icon="$transaction['icon']"
                         />
                     @empty
-                        <article class="rounded-2xl border border-[#F8D9E3] bg-white p-5 text-center shadow-[0_8px_22px_rgba(9,60,93,0.06)]">
+                        <article class="rounded-2xl border border-[#F8D9E3] bg-white p-5 text-center shadow-[0_8px_22px_rgba(9,60,93,0.06)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_rgba(9,60,93,0.1)]">
                             <p class="text-sm font-semibold text-[#9B7A82]">Belum ada transaksi terbaru.</p>
                         </article>
                     @endforelse

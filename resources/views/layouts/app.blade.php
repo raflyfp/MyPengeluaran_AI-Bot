@@ -6,6 +6,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ $title ?? config('app.name', 'MyPengeluaran') }}</title>
+        <link rel="icon" type="image/jpeg" href="{{ asset('logo.jpg') }}">
+        <link rel="shortcut icon" href="{{ asset('logo.jpg') }}">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +15,12 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="min-h-screen overflow-x-hidden bg-white font-sans text-[#4B2735] antialiased selection:bg-[#F45B8A]/25 selection:text-[#B8336A]">
+    <body
+        x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }"
+        x-effect="localStorage.setItem('theme', darkMode ? 'dark' : 'light')"
+        :class="darkMode ? 'app-dark' : ''"
+        class="min-h-screen overflow-x-hidden bg-white font-sans text-[#4B2735] antialiased selection:bg-[#F45B8A]/25 selection:text-[#B8336A]"
+    >
         <div class="eva-shell min-h-screen w-full overflow-x-hidden">
             {{ $slot }}
 

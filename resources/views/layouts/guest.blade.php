@@ -6,6 +6,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'MyPengeluaran') }}</title>
+        <link rel="icon" type="image/jpeg" href="{{ asset('logo.jpg') }}">
+        <link rel="shortcut icon" href="{{ asset('logo.jpg') }}">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,12 +15,17 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="min-h-screen overflow-x-hidden bg-white font-sans text-[#4B2735] antialiased selection:bg-[#F45B8A]/25 selection:text-[#B8336A]">
+    <body
+        x-data="{ darkMode: localStorage.getItem('theme') === 'dark' }"
+        x-effect="localStorage.setItem('theme', darkMode ? 'dark' : 'light')"
+        :class="darkMode ? 'app-dark' : ''"
+        class="min-h-screen overflow-x-hidden bg-white font-sans text-[#4B2735] antialiased selection:bg-[#F45B8A]/25 selection:text-[#B8336A]"
+    >
         <main class="eva-shell relative min-h-screen overflow-hidden lg:grid lg:grid-cols-[0.95fr_1.05fr]">
             <section class="hidden min-h-screen flex-col justify-between p-8 lg:flex">
                 <div class="max-w-md">
                     <div class="inline-flex items-center gap-3 rounded-full border border-white/70 bg-white/70 px-4 py-2 shadow-[0_12px_30px_rgba(9,60,93,0.08)] backdrop-blur-xl">
-                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#B8336A] text-sm font-extrabold text-white">MP</span>
+                        <x-application-logo class="h-10 w-10 rounded-full object-cover" />
                         <span class="text-sm font-extrabold tracking-normal text-[#093C5D]">MyPengeluaran</span>
                     </div>
 
@@ -45,11 +52,11 @@
                 </div> --}}
             </section>
 
-            <section class="flex min-h-screen items-center justify-center px-5 py-8">
+            <section class="flex min-h-screen items-center justify-center px-5 py-8 lg:px-6 lg:py-6">
                 <div class="w-full max-w-[430px]">
                     <div class="mb-6 flex items-center justify-between lg:hidden">
                         <div class="flex items-center gap-3">
-                            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-[#B8336A] text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(184,51,106,0.16)]">MP</span>
+                            <x-application-logo class="h-11 w-11 rounded-full object-cover shadow-[0_10px_22px_rgba(184,51,106,0.16)]" />
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#485A60]">Welcome to</p>
                                 <p class="text-lg font-extrabold text-[#093C5D]">MyPengeluaran</p>
@@ -57,7 +64,7 @@
                         </div>
                     </div>
 
-                    <div class="rounded-[2rem] border border-white/80 bg-white/82 p-5 shadow-[0_24px_60px_rgba(9,60,93,0.13)] backdrop-blur-2xl sm:p-6">
+                    <div class="rounded-[2rem] border border-white/80 bg-white/82 p-5 shadow-[0_24px_60px_rgba(9,60,93,0.13)] backdrop-blur-2xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_30px_70px_rgba(9,60,93,0.18)] sm:p-6">
                         {{ $slot }}
                     </div>
                 </div>

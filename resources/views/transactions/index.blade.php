@@ -103,14 +103,14 @@
             </div>
         </header>
 
-        <main class="space-y-7 px-5 pt-28 lg:max-w-7xl lg:px-8 lg:pt-36">
+        <main class="space-y-7 px-5 pt-28 lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start lg:gap-6 lg:space-y-0 lg:max-w-7xl lg:px-6 lg:pt-32">
             @if (session('status'))
                 <div class="rounded-2xl border border-[#BCEFD1] bg-[#DDF8E8] px-4 py-3 text-sm font-bold text-[#2E9F86] shadow-[0_10px_24px_rgba(9,60,93,0.06)]">
                     {{ session('status') }}
                 </div>
             @endif
 
-            <section aria-labelledby="transaction-search-heading" class="space-y-4">
+            <section aria-labelledby="transaction-search-heading" class="space-y-4 lg:col-span-2">
                 <h2 id="transaction-search-heading" class="sr-only">Search and filter transactions</h2>
 
                 <form method="GET" action="{{ route('transactions.index') }}" class="space-y-4">
@@ -144,23 +144,23 @@
                 </div>
             </section>
 
-            <section aria-labelledby="transaction-summary-heading" class="grid grid-cols-2 gap-4 lg:max-w-3xl">
+            <section aria-labelledby="transaction-summary-heading" class="grid grid-cols-2 gap-4 lg:col-start-2 lg:row-start-2 lg:grid-cols-1 lg:max-w-none">
                 <h2 id="transaction-summary-heading" class="sr-only">Transaction summary</h2>
 
-                <article class="rounded-2xl border border-white/80 bg-white/68 p-4 shadow-[0_16px_34px_rgba(9,60,93,0.08)] backdrop-blur-xl">
+                <article class="rounded-2xl border border-white/80 bg-white/68 p-4 shadow-[0_16px_34px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(9,60,93,0.12)]">
                     <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Spent</p>
                     <p class="mt-2 text-xl font-extrabold tracking-normal text-[#D93662]">{{ $summary['formatted_monthly_expense_total'] }}</p>
                     <p class="mt-1 text-xs font-semibold text-[#9B7A82]">{{ $summary['expense_count'] }} expenses this month</p>
                 </article>
 
-                <article class="rounded-2xl border border-white/80 bg-white/68 p-4 shadow-[0_16px_34px_rgba(9,60,93,0.08)] backdrop-blur-xl">
+                <article class="rounded-2xl border border-white/80 bg-white/68 p-4 shadow-[0_16px_34px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(9,60,93,0.12)]">
                     <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Income</p>
                     <p class="mt-2 text-xl font-extrabold tracking-normal text-[#2E9F86]">{{ $summary['formatted_monthly_income_total'] }}</p>
                     <p class="mt-1 text-xs font-semibold text-[#9B7A82]">{{ $summary['income_count'] }} deposits this month</p>
                 </article>
             </section>
 
-            <section id="transactions" aria-labelledby="transaction-list-heading" class="space-y-6">
+            <section id="transactions" aria-labelledby="transaction-list-heading" class="space-y-6 lg:col-start-1 lg:row-start-2">
                 <div class="flex items-end justify-between">
                     <div>
                         <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#9B7A82]">History</p>
@@ -197,7 +197,7 @@
                         </div>
                     </section>
                 @empty
-                    <article class="rounded-2xl border border-white/80 bg-white/76 p-6 text-center shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
+                    <article class="rounded-2xl border border-white/80 bg-white/76 p-6 text-center shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_42px_rgba(9,60,93,0.12)]">
                         <p class="text-lg font-extrabold text-[#B8336A]">No transactions yet</p>
                         <p class="mt-2 text-sm font-semibold leading-6 text-[#9B7A82]">Add your first expense manually or send one through Telegram.</p>
                         <button
@@ -225,13 +225,13 @@
             class="fixed inset-0 z-[1000] flex items-end justify-center bg-[#5C1632]/42 px-4 pb-4 backdrop-blur-sm"
             @click.self="closeEdit()"
         >
-            <div class="max-h-[92vh] w-full max-w-[430px] overflow-y-auto rounded-[1.75rem] border border-white/80 bg-white p-5 shadow-[0_24px_54px_rgba(9,60,93,0.24)] lg:max-w-xl" x-show="editing" x-transition:enter="transition ease-out duration-250" x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
+            <div class="max-h-[92vh] w-full max-w-[430px] overflow-y-auto rounded-[1.75rem] border border-white/80 bg-white p-5 shadow-[0_24px_54px_rgba(9,60,93,0.24)] transition duration-200 hover:shadow-[0_30px_60px_rgba(9,60,93,0.28)] lg:max-w-xl" x-show="editing" x-transition:enter="transition ease-out duration-250" x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
                 <div class="mb-5 flex items-center justify-between gap-4">
                     <div>
                         <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#9B7A82]">Update</p>
                         <h2 class="mt-1 text-xl font-extrabold text-[#B8336A]">Edit Transaction</h2>
                     </div>
-                    <button type="button" class="flex h-10 w-10 items-center justify-center rounded-full bg-[#FFF1F6] text-[#B8336A] transition active:scale-95" @click="closeEdit()" aria-label="Close edit form">
+                    <button type="button" class="flex h-10 w-10 items-center justify-center rounded-full bg-[#FFF1F6] text-[#B8336A] transition hover:bg-[#FFE4EF] active:scale-95" @click="closeEdit()" aria-label="Close edit form">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
@@ -244,7 +244,7 @@
                     <input type="hidden" name="source" :value="editing?.source || 'manual'">
 
                     <div class="grid grid-cols-2 gap-3">
-                        <label class="rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3">
+                        <label class="rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)]">
                             <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Type</span>
                             <select name="type" x-model="editing.type" class="mt-2 w-full border-0 bg-transparent p-0 text-sm font-extrabold text-[#B8336A] focus:ring-0">
                                 <option value="expense">Expense</option>
@@ -252,13 +252,13 @@
                             </select>
                         </label>
 
-                        <label class="rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3">
+                        <label class="rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)]">
                             <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Amount</span>
                             <input name="amount" type="number" min="0.01" step="0.01" x-model="editing.raw_amount" class="mt-2 w-full border-0 bg-transparent p-0 text-sm font-extrabold text-[#B8336A] focus:ring-0">
                         </label>
                     </div>
 
-                    <label class="block rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3">
+                    <label class="block rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)]">
                         <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Category</span>
                         <select name="category_id" x-model="editing.category_id" class="mt-2 w-full border-0 bg-transparent p-0 text-sm font-extrabold text-[#B8336A] focus:ring-0">
                             <template x-for="category in categories.filter((category) => category.type === editing.type)" :key="category.id">
@@ -267,12 +267,12 @@
                         </select>
                     </label>
 
-                    <label class="block rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3">
+                    <label class="block rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)]">
                         <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Date</span>
                         <input name="transaction_date" type="datetime-local" x-model="editing.transaction_date" class="mt-2 w-full border-0 bg-transparent p-0 text-sm font-extrabold text-[#B8336A] focus:ring-0">
                     </label>
 
-                    <label class="block rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3">
+                    <label class="block rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-3 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)]">
                         <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Note</span>
                         <textarea name="note" rows="3" x-model="editing.note" class="mt-2 w-full resize-none border-0 bg-transparent p-0 text-sm font-semibold text-[#4B2735] placeholder:text-[#9B7A82] focus:ring-0"></textarea>
                     </label>
@@ -291,7 +291,7 @@
             class="fixed inset-0 z-[1100] flex items-end justify-center bg-[#5C1632]/42 px-4 pb-4 backdrop-blur-sm"
             @click.self="closeConfirmSave()"
         >
-            <div class="w-full max-w-[380px] overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_20px_46px_rgba(9,60,93,0.22)]" x-show="confirmEditSave" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
+            <div class="w-full max-w-[380px] overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_20px_46px_rgba(9,60,93,0.22)] transition duration-200 hover:shadow-[0_24px_50px_rgba(9,60,93,0.28)]" x-show="confirmEditSave" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
                 <div class="px-5 py-5">
                     <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#9B7A82]">Confirm</p>
                     <h3 class="mt-2 text-lg font-extrabold text-[#B8336A]">Save changes?</h3>
@@ -311,7 +311,7 @@
             class="fixed inset-0 z-[1100] flex items-end justify-center bg-[#5C1632]/42 px-4 pb-4 backdrop-blur-sm"
             @click.self="closeConfirmDelete()"
         >
-            <div class="w-full max-w-[380px] overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_20px_46px_rgba(9,60,93,0.22)]" x-show="confirmDelete" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
+            <div class="w-full max-w-[380px] overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_20px_46px_rgba(9,60,93,0.22)] transition duration-200 hover:shadow-[0_24px_50px_rgba(9,60,93,0.28)]" x-show="confirmDelete" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="translate-y-6 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
                 <div class="px-5 py-5">
                     <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#9B7A82]">Confirm</p>
                     <h3 class="mt-2 text-lg font-extrabold text-[#B8336A]">Delete transaction?</h3>
@@ -335,13 +335,13 @@
             class="fixed inset-0 z-[1000] flex items-end justify-center bg-[#5C1632]/42 px-4 pb-4 pt-4 backdrop-blur-sm"
             @click.self="closeDetail()"
         >
-            <div class="max-h-[92vh] w-full max-w-[430px] overflow-y-auto rounded-[1.75rem] border border-white/80 bg-white shadow-[0_24px_54px_rgba(9,60,93,0.24)] lg:max-w-xl" x-show="detail" x-transition:enter="transition ease-out duration-250" x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
+            <div class="max-h-[92vh] w-full max-w-[430px] overflow-y-auto rounded-[1.75rem] border border-white/80 bg-white shadow-[0_24px_54px_rgba(9,60,93,0.24)] transition duration-200 hover:shadow-[0_30px_60px_rgba(9,60,93,0.28)] lg:max-w-xl" x-show="detail" x-transition:enter="transition ease-out duration-250" x-transition:enter-start="translate-y-8 opacity-0" x-transition:enter-end="translate-y-0 opacity-100">
                 <div class="flex items-center justify-between border-b border-[#F8D9E3] px-5 py-4">
                     <div>
                         <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#9B7A82]">Detail</p>
                         <h2 class="mt-1 text-xl font-extrabold text-[#B8336A]" x-text="detail?.title"></h2>
                     </div>
-                    <button type="button" class="flex h-10 w-10 items-center justify-center rounded-full bg-[#FFF1F6] text-[#B8336A] transition active:scale-95" @click="closeDetail()" aria-label="Close transaction detail">
+                    <button type="button" class="flex h-10 w-10 items-center justify-center rounded-full bg-[#FFF1F6] text-[#B8336A] transition hover:bg-[#FFE4EF] active:scale-95" @click="closeDetail()" aria-label="Close transaction detail">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
@@ -349,7 +349,7 @@
                 </div>
 
                 <div class="space-y-4 px-5 py-5">
-                    <div class="rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-4">
+                    <div class="rounded-2xl border border-[#F8D9E3] bg-[#FFF7EA] p-4 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)]">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Category</p>
@@ -370,7 +370,7 @@
                         </div>
                     </div>
 
-                    <div class="rounded-2xl border border-[#F8D9E3] bg-white p-4">
+                    <div class="rounded-2xl border border-[#F8D9E3] bg-white p-4 transition duration-200 hover:shadow-[0_12px_24px_rgba(9,60,93,0.08)]">
                         <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Note</p>
                         <p class="mt-2 text-sm font-semibold text-[#4B2735]" x-text="detail?.note || 'No notes added.'"></p>
                     </div>

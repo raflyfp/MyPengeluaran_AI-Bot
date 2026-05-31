@@ -3,7 +3,7 @@
     'highlight' => '15% more',
 ])
 
-<article class="w-full min-w-0 max-w-full rounded-2xl border border-[#D9E5EA] bg-white/48 p-5 shadow-[0_14px_34px_rgba(9,60,93,0.06)] backdrop-blur-xl">
+<article class="w-full min-w-0 max-w-full rounded-2xl border border-[#D9E5EA] bg-white/48 p-5 shadow-[0_14px_34px_rgba(9,60,93,0.06)] backdrop-blur-xl transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_40px_rgba(9,60,93,0.12)]">
     <div class="flex min-w-0 items-start gap-4">
         <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#7EC7E8] text-white shadow-[0_10px_22px_rgba(126,199,232,0.18)]">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
