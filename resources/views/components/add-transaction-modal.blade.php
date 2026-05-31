@@ -192,7 +192,7 @@
 
             <button
                 type="submit"
-                class="flex h-14 w-full items-center justify-center rounded-full bg-gradient-to-br from-[#093C5D] to-[#008C88] text-base font-extrabold text-white shadow-[0_16px_30px_rgba(9,60,93,0.22)] transition duration-200 hover:scale-[1.01] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                class="flex h-14 w-full items-center justify-center rounded-full bg-[#B8336A] text-base font-extrabold text-white shadow-[0_14px_28px_rgba(184,51,106,0.18)] transition duration-200 hover:scale-[1.01] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 @disabled($categories->isEmpty())
             >
                 Save Transaction

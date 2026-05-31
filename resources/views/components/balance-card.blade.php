@@ -7,10 +7,9 @@
 
 <article
     x-data="{ visible: true }"
-    class="relative w-full min-w-0 max-w-full overflow-hidden rounded-2xl bg-gradient-to-br from-[#16B69C] via-[#087B69] to-[#093C5D] p-6 text-white shadow-[0_22px_44px_rgba(9,60,93,0.22)] transition duration-200 active:scale-[0.99]"
+    class="relative w-full min-w-0 max-w-full overflow-hidden rounded-2xl bg-[#B8336A] p-6 text-white shadow-[0_18px_34px_rgba(184,51,106,0.18)] transition duration-200 active:scale-[0.99]"
 >
     <div class="absolute -right-14 -top-16 h-40 w-40 rounded-full bg-white/14 blur-2xl"></div>
-    <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#031E2F]/35 to-transparent"></div>
 
     <div class="relative min-w-0">
         <div class="mb-3 flex min-w-0 items-center justify-between gap-3">

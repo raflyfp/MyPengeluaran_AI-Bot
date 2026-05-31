@@ -24,10 +24,10 @@
         ];
 
         $categories = $categories ?? [
-            ['name' => 'Food & Drink', 'amount' => 'Rp 2.140.000', 'share' => 29, 'color' => '#0D8B7D'],
-            ['name' => 'Bills & Utilities', 'amount' => 'Rp 1.680.000', 'share' => 22, 'color' => '#093C5D'],
-            ['name' => 'Transport', 'amount' => 'Rp 1.120.000', 'share' => 15, 'color' => '#3B7597'],
-            ['name' => 'Shopping', 'amount' => 'Rp 980.000', 'share' => 13, 'color' => '#6FD1D7'],
+            ['name' => 'Food & Drink', 'amount' => 'Rp 2.140.000', 'share' => 29, 'color' => '#2E9F86'],
+            ['name' => 'Bills & Utilities', 'amount' => 'Rp 1.680.000', 'share' => 22, 'color' => '#B8336A'],
+            ['name' => 'Transport', 'amount' => 'Rp 1.120.000', 'share' => 15, 'color' => '#69A7D8'],
+            ['name' => 'Shopping', 'amount' => 'Rp 980.000', 'share' => 13, 'color' => '#7EC7E8'],
         ];
 
         $months = $months ?? [
@@ -109,17 +109,17 @@
     @endphp
 
     <div class="mx-auto min-h-screen max-w-[430px] pb-32 lg:ml-72 lg:mr-0 lg:max-w-none lg:pb-12">
-        <header class="fixed inset-x-0 top-0 z-40 mx-auto max-w-[430px] border-b border-white/70 bg-[#F7FAFC]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl lg:left-72 lg:right-6 lg:top-6 lg:mx-0 lg:max-w-none lg:rounded-[1.75rem] lg:border lg:px-8">
+        <header class="fixed inset-x-0 top-0 z-40 mx-auto max-w-[430px] border-b border-white/70 bg-[#FFF7EA]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl lg:left-72 lg:right-6 lg:top-6 lg:mx-0 lg:max-w-none lg:rounded-[1.75rem] lg:border lg:px-8">
             <div class="flex items-center justify-between gap-4">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#485A60]">MyPengeluaran</p>
-                    <h1 class="mt-1 text-2xl font-extrabold tracking-normal text-[#093C5D]">Analytics</h1>
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#9A6275]">MyPengeluaran</p>
+                    <h1 class="mt-1 text-2xl font-extrabold tracking-normal text-[#B8336A]">Analytics</h1>
                 </div>
 
                 <a
                     href="{{ $exportUrl }}"
                     aria-label="Export analytics"
-                    class="flex h-12 w-12 items-center justify-center rounded-full bg-white/76 text-[#093C5D] shadow-[0_10px_24px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:bg-white active:scale-95"
+                    class="flex h-12 w-12 items-center justify-center rounded-full bg-white/76 text-[#B8336A] shadow-[0_10px_24px_rgba(9,60,93,0.08)] backdrop-blur-xl transition duration-200 hover:bg-white active:scale-95"
                 >
                     <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 4v10M8 10l4 4 4-4M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -132,15 +132,15 @@
             <section aria-labelledby="spending-summary-heading" class="space-y-4">
                 <div class="flex items-center justify-between gap-4">
                     <div>
-                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#72777E]">Overview</p>
-                        <h2 id="spending-summary-heading" class="mt-1 text-xl font-bold tracking-normal text-[#181C1E]">{{ $summaryTitle }}</h2>
+                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#9B7A82]">Overview</p>
+                        <h2 id="spending-summary-heading" class="mt-1 text-xl font-bold tracking-normal text-[#4B2735]">{{ $summaryTitle }}</h2>
                     </div>
 
                     <div class="flex rounded-full bg-white/72 p-1 shadow-[0_8px_20px_rgba(9,60,93,0.06)] backdrop-blur-xl">
                         @foreach (['W', 'M', 'Y'] as $item)
                             <a
                                 href="{{ $periodUrl($item) }}"
-                                class="flex h-8 w-9 items-center justify-center rounded-full text-sm font-bold transition duration-200 {{ $activePeriod === $item ? 'bg-[#093C5D] text-white shadow-sm' : 'text-[#3C4A42] hover:bg-white' }}"
+                                class="flex h-8 w-9 items-center justify-center rounded-full text-sm font-bold transition duration-200 {{ $activePeriod === $item ? 'bg-[#B8336A] text-white shadow-sm' : 'text-[#684C59] hover:bg-white' }}"
                             >
                                 {{ $item }}
                             </a>
@@ -152,13 +152,13 @@
                     @foreach ($summaryCards as $card)
                         <article class="rounded-2xl border border-white/80 bg-white/72 p-4 shadow-[0_16px_34px_rgba(9,60,93,0.08)] backdrop-blur-xl">
                             <div class="mb-4 flex items-start justify-between gap-2">
-                                <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">{{ $card['label'] }}</p>
-                                <span class="rounded-full px-2 py-1 text-[11px] font-extrabold {{ $card['tone'] === 'income' ? 'bg-[#DFF8F4] text-[#007A53]' : 'bg-[#FFE7E7] text-[#BA1A1A]' }}">
+                                <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">{{ $card['label'] }}</p>
+                                <span class="rounded-full px-2 py-1 text-[11px] font-extrabold {{ $card['tone'] === 'income' ? 'bg-[#DDF8E8] text-[#2E9F86]' : 'bg-[#FFE4EF] text-[#D93662]' }}">
                                     {{ $card['change'] }}
                                 </span>
                             </div>
-                            <p class="text-[1.35rem] font-extrabold leading-7 tracking-normal {{ $card['tone'] === 'income' ? 'text-[#007A53]' : 'text-[#181C1E]' }}">{{ $card['value'] }}</p>
-                            <p class="mt-2 text-xs font-semibold text-[#72777E]">{{ $card['caption'] }}</p>
+                            <p class="text-[1.35rem] font-extrabold leading-7 tracking-normal {{ $card['tone'] === 'income' ? 'text-[#2E9F86]' : 'text-[#4B2735]' }}">{{ $card['value'] }}</p>
+                            <p class="mt-2 text-xs font-semibold text-[#9B7A82]">{{ $card['caption'] }}</p>
                         </article>
                     @endforeach
                 </div>
@@ -167,10 +167,10 @@
             <section aria-labelledby="breakdown-heading" class="rounded-2xl border border-white bg-white/84 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
                 <div class="mb-5 flex items-start justify-between gap-4">
                     <div>
-                        <h2 id="breakdown-heading" class="text-xl font-bold tracking-normal text-[#181C1E]">Spending Breakdown</h2>
-                        <p class="mt-1 text-sm font-medium text-[#72777E]">{{ $breakdownCaption }}</p>
+                        <h2 id="breakdown-heading" class="text-xl font-bold tracking-normal text-[#4B2735]">Spending Breakdown</h2>
+                        <p class="mt-1 text-sm font-medium text-[#9B7A82]">{{ $breakdownCaption }}</p>
                     </div>
-                    <span class="rounded-full bg-[#EAF7F8] px-3 py-1 text-xs font-extrabold text-[#007A53]">{{ $summaryCards[0]['change'] }}</span>
+                    <span class="rounded-full bg-[#FFF2C8] px-3 py-1 text-xs font-extrabold text-[#2E9F86]">{{ $summaryCards[0]['change'] }}</span>
                 </div>
 
                 <div
@@ -186,8 +186,8 @@
                             class="h-40 w-40"
                         ></div>
                         <figcaption class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-                            <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#72777E]">Spent</span>
-                            <span class="mt-1 text-xl font-extrabold text-[#093C5D]">{{ $summaryCards[0]['value'] }}</span>
+                            <span class="text-xs font-bold uppercase tracking-[0.14em] text-[#9B7A82]">Spent</span>
+                            <span class="mt-1 text-xl font-extrabold text-[#B8336A]">{{ $summaryCards[0]['value'] }}</span>
                         </figcaption>
                     </figure>
 
@@ -197,11 +197,11 @@
                                 <div class="flex min-w-0 items-center gap-3">
                                     <span class="h-3 w-3 shrink-0 rounded-full" style="background-color: {{ $category['color'] }}"></span>
                                     <div class="min-w-0">
-                                        <p class="truncate text-sm font-extrabold text-[#181C1E]">{{ $category['name'] }}</p>
-                                        <p class="text-xs font-semibold text-[#72777E]">{{ $category['amount'] }}</p>
+                                        <p class="truncate text-sm font-extrabold text-[#4B2735]">{{ $category['name'] }}</p>
+                                        <p class="text-xs font-semibold text-[#9B7A82]">{{ $category['amount'] }}</p>
                                     </div>
                                 </div>
-                                <p class="shrink-0 text-sm font-extrabold text-[#093C5D]">{{ $category['share'] }}%</p>
+                                <p class="shrink-0 text-sm font-extrabold text-[#B8336A]">{{ $category['share'] }}%</p>
                             </div>
                         @endforeach
                     </div>
@@ -214,13 +214,13 @@
                 @foreach ($analyticsCards as $card)
                     @php
                         $toneClasses = [
-                            'blue' => 'from-[#093C5D] to-[#3B7597] text-white',
-                            'green' => 'from-[#16B69C] to-[#007A53] text-white',
-                            'cyan' => 'from-[#EAF7F8] to-white text-[#093C5D]',
+                            'blue' => 'bg-[#B8336A] text-white',
+                            'green' => 'bg-[#2E9F86] text-white',
+                            'cyan' => 'bg-[#FFF2C8] text-[#B8336A]',
                         ][$card['tone']];
                     @endphp
 
-                    <article class="rounded-2xl border border-white/70 bg-gradient-to-br {{ $toneClasses }} p-4 shadow-[0_14px_30px_rgba(9,60,93,0.09)]">
+                    <article class="rounded-2xl border border-white/70 {{ $toneClasses }} p-4 shadow-[0_12px_24px_rgba(9,60,93,0.07)]">
                         <p class="text-[11px] font-bold uppercase tracking-[0.12em] opacity-75">{{ $card['label'] }}</p>
                         <p class="mt-3 text-lg font-extrabold tracking-normal">{{ $card['value'] }}</p>
                         <p class="mt-1 text-xs font-semibold opacity-75">{{ $card['caption'] }}</p>
@@ -231,14 +231,14 @@
             <section aria-labelledby="weekly-trend-heading" class="rounded-2xl border border-white bg-white/84 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
                 <div class="mb-5 flex items-start justify-between gap-4">
                     <div>
-                        <h2 id="weekly-trend-heading" class="text-xl font-bold tracking-normal text-[#181C1E]">{{ $trendTitle }}</h2>
-                        <p class="mt-1 text-sm font-medium text-[#72777E]">{{ $trendCaption }}</p>
+                        <h2 id="weekly-trend-heading" class="text-xl font-bold tracking-normal text-[#4B2735]">{{ $trendTitle }}</h2>
+                        <p class="mt-1 text-sm font-medium text-[#9B7A82]">{{ $trendCaption }}</p>
                     </div>
-                    <span class="rounded-full bg-[#DFF8F4] px-3 py-1 text-xs font-extrabold text-[#007A53]">Healthy</span>
+                    <span class="rounded-full bg-[#DDF8E8] px-3 py-1 text-xs font-extrabold text-[#2E9F86]">Healthy</span>
                 </div>
 
                 <div
-                    class="relative overflow-visible rounded-2xl border border-[#DCE8EB]/80 bg-gradient-to-b from-[#F7FEFF] to-white"
+                    class="relative overflow-visible rounded-2xl border border-[#F5C9D6]/80 bg-white"
                     aria-label="ApexCharts area chart placeholder for weekly trends"
                 >
                     <div
@@ -262,10 +262,10 @@
             <section aria-labelledby="monthly-chart-heading" class="rounded-2xl border border-white bg-white/84 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
                 <div class="mb-5 flex items-start justify-between gap-4">
                     <div>
-                        <h2 id="monthly-chart-heading" class="text-xl font-bold tracking-normal text-[#181C1E]">{{ $incomeExpenseTitle }}</h2>
-                        <p class="mt-1 text-sm font-medium text-[#72777E]">{{ $incomeExpenseCaption }}</p>
+                        <h2 id="monthly-chart-heading" class="text-xl font-bold tracking-normal text-[#4B2735]">{{ $incomeExpenseTitle }}</h2>
+                        <p class="mt-1 text-sm font-medium text-[#9B7A82]">{{ $incomeExpenseCaption }}</p>
                     </div>
-                    <span class="rounded-full bg-[#EAF7F8] px-3 py-1 text-xs font-extrabold text-[#093C5D]">{{ $activePeriod }}</span>
+                    <span class="rounded-full bg-[#FFF2C8] px-3 py-1 text-xs font-extrabold text-[#B8336A]">{{ $activePeriod }}</span>
                 </div>
 
                 <div
@@ -273,22 +273,22 @@
                     data-chart-engine="ApexCharts"
                     data-chart-type="bar"
                     data-chart-payload='@json($apexCharts['monthlyIncomeVsExpense'])'
-                    class="h-52 rounded-2xl bg-gradient-to-b from-[#F7FEFF] to-white"
+                    class="h-52 rounded-2xl bg-white"
                     aria-label="ApexCharts bar chart for monthly income versus expense"
                 ></div>
             </section>
 
             <section aria-labelledby="category-stats-heading" class="rounded-2xl border border-white/80 bg-white/72 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
-                <h2 id="category-stats-heading" class="text-xl font-bold tracking-normal text-[#181C1E]">Category Statistics</h2>
+                <h2 id="category-stats-heading" class="text-xl font-bold tracking-normal text-[#4B2735]">Category Statistics</h2>
 
                 <div class="mt-5 space-y-5">
                     @foreach ($categories as $category)
                         <article>
                             <div class="mb-2 flex items-center justify-between gap-4">
-                                <p class="text-sm font-extrabold text-[#181C1E]">{{ $category['name'] }}</p>
-                                <p class="text-sm font-bold text-[#72777E]">{{ $category['amount'] }}</p>
+                                <p class="text-sm font-extrabold text-[#4B2735]">{{ $category['name'] }}</p>
+                                <p class="text-sm font-bold text-[#9B7A82]">{{ $category['amount'] }}</p>
                             </div>
-                            <div class="h-3 overflow-hidden rounded-full bg-[#EAF3F6]">
+                            <div class="h-3 overflow-hidden rounded-full bg-[#FFF2C8]">
                                 <div class="h-full rounded-full" style="width: {{ $category['share'] }}%; background-color: {{ $category['color'] }}"></div>
                             </div>
                         </article>
@@ -297,24 +297,24 @@
             </section>
 
             <section aria-labelledby="monthly-overview-heading" class="rounded-2xl border border-white/80 bg-white/72 p-5 shadow-[0_18px_38px_rgba(9,60,93,0.08)] backdrop-blur-xl">
-                <h2 id="monthly-overview-heading" class="text-xl font-bold tracking-normal text-[#181C1E]">{{ $overviewTitle }}</h2>
-                <p class="mt-1 text-sm font-medium text-[#72777E]">{{ $overviewCaption }}</p>
+                <h2 id="monthly-overview-heading" class="text-xl font-bold tracking-normal text-[#4B2735]">{{ $overviewTitle }}</h2>
+                <p class="mt-1 text-sm font-medium text-[#9B7A82]">{{ $overviewCaption }}</p>
 
                 <div class="mt-5 space-y-3">
                     @foreach ($months as $month)
-                        <article class="rounded-2xl bg-[#F7FAFC] p-4">
+                        <article class="rounded-2xl bg-[#FFF7EA] p-4">
                             <div class="mb-3 flex items-center justify-between">
-                                <p class="text-base font-extrabold text-[#093C5D]">{{ $month['label'] }}</p>
-                                <p class="text-sm font-extrabold text-[#007A53]">{{ $month['net'] }}</p>
+                                <p class="text-base font-extrabold text-[#B8336A]">{{ $month['label'] }}</p>
+                                <p class="text-sm font-extrabold text-[#2E9F86]">{{ $month['net'] }}</p>
                             </div>
                             <div class="grid grid-cols-2 gap-3 text-sm">
                                 <div>
-                                    <p class="text-xs font-bold uppercase tracking-[0.12em] text-[#72777E]">Income</p>
-                                    <p class="mt-1 font-extrabold text-[#007A53]">{{ $month['income'] }}</p>
+                                    <p class="text-xs font-bold uppercase tracking-[0.12em] text-[#9B7A82]">Income</p>
+                                    <p class="mt-1 font-extrabold text-[#2E9F86]">{{ $month['income'] }}</p>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-bold uppercase tracking-[0.12em] text-[#72777E]">Expense</p>
-                                    <p class="mt-1 font-extrabold text-[#181C1E]">{{ $month['expense'] }}</p>
+                                    <p class="text-xs font-bold uppercase tracking-[0.12em] text-[#9B7A82]">Expense</p>
+                                    <p class="mt-1 font-extrabold text-[#4B2735]">{{ $month['expense'] }}</p>
                                 </div>
                             </div>
                         </article>

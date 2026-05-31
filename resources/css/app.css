@@ -5,3 +5,151 @@
 [x-cloak] {
     display: none !important;
 }
+
+@layer components {
+    .eva-shell {
+        position: relative;
+        min-height: 100vh;
+        overflow-x: hidden;
+        background: #ffffff;
+    }
+
+    .eva-shell::before,
+    .eva-shell::after {
+        display: none;
+    }
+
+    .eva-shell > * {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+/* Theme aliases for existing Tailwind arbitrary color classes. */
+[class*="bg-[#F7FAFC]"],
+[class*="bg-[#EEF7FA]"],
+[class*="bg-[#FFF7EA]"] { background-color: #ffffff !important; }
+[class*="bg-[#061E2E]"],
+[class*="bg-[#031E2F]"] { background-color: rgba(92, 22, 50, 0.48) !important; }
+[class*="bg-[#093C5D]"] { background-color: #b8336a !important; }
+[class*="bg-[#0C6680]"] { background-color: #f26d99 !important; }
+[class*="bg-[#16B69C]"],
+[class*="bg-[#007A53]"],
+[class*="bg-[#0D8B7D]"] { background-color: #2e9f86 !important; }
+[class*="bg-[#6FD1D7]"] { background-color: #7ec7e8 !important; }
+[class*="bg-[#008C88]"] { background-color: #f45b8a !important; }
+[class*="bg-[#D8E4E8]"],
+[class*="bg-[#DCE8EB]"],
+[class*="bg-[#E7EEF2]"] { background-color: #f5c9d6 !important; }
+[class*="bg-[#F2F7F8]"],
+[class*="bg-[#E9EEF1]"],
+[class*="bg-[#EEF3F7]"] { background-color: #fff1f6 !important; }
+[class*="bg-[#EAF7F8]"],
+[class*="bg-[#EAF3F6]"],
+[class*="bg-[#FFF1D9]"] { background-color: #fff2c8 !important; }
+[class*="bg-[#DFF8F4]"],
+[class*="bg-[#C9F3E7]"] { background-color: #ddf8e8 !important; }
+[class*="bg-[#E7F3FF]"] { background-color: #eaf2ff !important; }
+[class*="bg-[#E7EEFF]"] { background-color: #eaf2ff !important; }
+[class*="bg-[#FFE7EC]"] { background-color: #ffe4ef !important; }
+[class*="bg-[#EDEBFF]"] { background-color: #f0e9ff !important; }
+[class*="bg-[#F7FEFF]"] { background-color: #fffaf0 !important; }
+[class*="bg-[#FFE7E7]"],
+[class*="bg-[#FFECEB]"],
+[class*="bg-[#FFF5F5]"] { background-color: #fff1f6 !important; }
+
+[class*="text-[#093C5D]"] { color: #b8336a !important; }
+[class*="text-[#0C6680]"] { color: #f26d99 !important; }
+[class*="text-[#16B69C]"],
+[class*="text-[#007A53]"],
+[class*="text-[#0D8B7D]"],
+[class*="text-[#006C49]"] { color: #2e9f86 !important; }
+[class*="text-[#6FD1D7]"] { color: #5b8fe6 !important; }
+[class*="text-[#181C1E]"] { color: #4b2735 !important; }
+[class*="text-[#243135]"] { color: #5c3e4b !important; }
+[class*="text-[#485A60]"] { color: #9a6275 !important; }
+[class*="text-[#72777E]"] { color: #9b7a82 !important; }
+[class*="text-[#5B6067]"] { color: #8a6a75 !important; }
+[class*="text-[#3A4A4D]"],
+[class*="text-[#3C4A42]"],
+[class*="text-[#334B4A]"] { color: #684c59 !important; }
+[class*="text-[#1D78C1]"],
+[class*="text-[#0D5DCF]"] { color: #5b8fe6 !important; }
+[class*="text-[#0C7A83]"] { color: #3b8ca6 !important; }
+[class*="text-[#3B7597]"] { color: #69a7d8 !important; }
+[class*="text-[#BA1A1A]"],
+[class*="text-[#A11616]"] { color: #d93662 !important; }
+[class*="text-[#9A5C00]"] { color: #b96f00 !important; }
+[class*="text-[#4D42A8]"] { color: #8a54c8 !important; }
+
+[class*="border-[#DCE8EB]"],
+[class*="border-[#E7EEF2]"],
+[class*="border-[#D8E4E8]"] { border-color: #f5c9d6 !important; }
+[class*="border-[#BFEDE5]"] { border-color: #bcefd1 !important; }
+[class*="border-[#BFE4E8]"] { border-color: #bfe3ff !important; }
+[class*="border-[#F4B3B3]"] { border-color: #f7a9c2 !important; }
+[class*="divide-[#E7EEF2]"] > :not([hidden]) ~ :not([hidden]) { border-color: #f8d9e3 !important; }
+
+[class*="from-[#093C5D]"] {
+    --tw-gradient-from: #b8336a var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: rgb(184 51 106 / 0) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[class*="from-[#16B69C]"],
+[class*="from-[#0D8B7D]"] {
+    --tw-gradient-from: #82d9a8 var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: rgb(130 217 168 / 0) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[class*="from-[#6FD1D7]"] {
+    --tw-gradient-from: #7ec7e8 var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: rgb(126 199 232 / 0) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[class*="from-[#2F7BEF]"] {
+    --tw-gradient-from: #7aa9ff var(--tw-gradient-from-position) !important;
+    --tw-gradient-to: rgb(122 169 255 / 0) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[class*="via-[#0C6680]"] {
+    --tw-gradient-to: rgb(242 109 153 / 0) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), #f26d99 var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+[class*="via-[#087B69]"] {
+    --tw-gradient-to: rgb(244 91 138 / 0) var(--tw-gradient-to-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), #f45b8a var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+[class*="to-[#16B69C]"],
+[class*="to-[#008C88]"],
+[class*="to-[#0D8B7D]"] { --tw-gradient-to: #82d9a8 var(--tw-gradient-to-position) !important; }
+[class*="to-[#093C5D]"] { --tw-gradient-to: #b8336a var(--tw-gradient-to-position) !important; }
+[class*="to-[#6FD1D7]"] { --tw-gradient-to: #7ec7e8 var(--tw-gradient-to-position) !important; }
+[class*="to-[#0D5DCF]"] { --tw-gradient-to: #617be8 var(--tw-gradient-to-position) !important; }
+
+[class*="placeholder:text-[#72777E]"]::placeholder,
+[class*="placeholder:text-[#A5B2B7]"]::placeholder { color: #b3919b !important; }
+[class*="focus:border-[#6FD1D7]"]:focus,
+[class*="focus-within:border-[#6FD1D7]"]:focus-within { border-color: #7ec7e8 !important; }
+
+[class*="bg-gradient-to-"] {
+    background-image: none !important;
+}
+
+[class*="bg-gradient-to-"][class*="from-[#093C5D]"],
+[class*="bg-gradient-to-"][class*="from-[#B8336A]"] {
+    background-color: #b8336a !important;
+}
+
+[class*="bg-gradient-to-"][class*="from-[#F45B8A]"],
+[class*="bg-gradient-to-"][class*="from-[#6FD1D7]"] {
+    background-color: #f45b8a !important;
+}
+
+[class*="bg-gradient-to-"][class*="from-[#16B69C]"],
+[class*="bg-gradient-to-"][class*="from-[#2F7BEF]"] {
+    background-color: #2e9f86 !important;
+}
+
+[class*="bg-gradient-to-"][class*="from-[#F7FEFF]"] {
+    background-color: #ffffff !important;
+}

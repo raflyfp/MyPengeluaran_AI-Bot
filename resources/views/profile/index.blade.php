@@ -46,7 +46,7 @@
             weeklySummary: true,
             botReceipts: false,
         }"
-        :class="darkMode ? 'bg-[#061E2E] text-white' : ''"
+        :class="darkMode ? 'bg-[#5C1632] text-white' : ''"
     >
         <header class="fixed inset-x-0 top-0 z-40 mx-auto max-w-[430px] border-b border-white/70 bg-[#F7FAFC]/78 px-5 py-4 shadow-[0_2px_16px_rgba(9,60,93,0.05)] backdrop-blur-2xl lg:left-72 lg:right-6 lg:top-6 lg:mx-0 lg:max-w-none lg:rounded-[1.75rem] lg:border lg:px-8">
             <div class="flex items-center justify-between gap-4">
@@ -74,9 +74,9 @@
                 </div>
             @endif
 
-            <section aria-labelledby="profile-card-heading" class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#093C5D] via-[#0C6680] to-[#16B69C] p-5 text-white shadow-[0_22px_44px_rgba(9,60,93,0.22)]">
+            <section aria-labelledby="profile-card-heading" class="relative overflow-hidden rounded-2xl bg-[#B8336A] p-5 text-white shadow-[0_18px_34px_rgba(184,51,106,0.18)]">
                 <div class="absolute -right-12 -top-14 h-36 w-36 rounded-full bg-white/14 blur-2xl"></div>
-                <div class="absolute -bottom-16 left-8 h-36 w-36 rounded-full bg-[#6FD1D7]/22 blur-3xl"></div>
+                {{-- <div class="absolute -bottom-16 left-8 h-36 w-36 rounded-full bg-[#6FD1D7]/22 blur-3xl"></div> --}}
 
                 <div class="relative">
                     <div class="flex items-start gap-4">
@@ -112,8 +112,8 @@
                 <div class="flex items-center justify-between gap-4">
                     <div class="min-w-0">
                         <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#72777E]">Appearance</p>
-                        <h2 id="appearance-heading" class="mt-1 text-xl font-bold tracking-normal text-[#181C1E]">Dark mode</h2>
-                        <p class="mt-1 text-sm font-semibold text-[#72777E]" x-text="darkMode ? 'Previewing deep ocean mode' : 'Light ocean mode active'"></p>
+                        <h2 id="appearance-heading" class="mt-1 text-xl font-bold tracking-normal text-[#181C1E]">Theme preview</h2>
+                        <p class="mt-1 text-sm font-semibold text-[#72777E]" x-text="darkMode ? 'Previewing berry night mode' : 'Pastel scrapbook mode active'"></p>
                     </div>
 
                     <button

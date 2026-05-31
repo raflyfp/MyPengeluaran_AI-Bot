@@ -13,7 +13,10 @@
 
 <nav
     aria-label="Primary navigation"
-    x-data="{ active: @js($active) }"
+    x-data="{ active: @js($active), hidden: false }"
+    x-show="! hidden"
+    x-transition.opacity.duration.150ms
+    x-on:bottom-nav-visibility.window="hidden = $event.detail.hidden"
     class="fixed inset-x-0 bottom-4 z-50 mx-auto flex w-[calc(100%-32px)] max-w-[398px] items-center justify-between rounded-full border border-white/70 bg-white/75 px-4 py-2 shadow-[0_18px_45px_rgba(9,60,93,0.16)] backdrop-blur-2xl lg:hidden"
 >
     @foreach ($items as $index => $item)
@@ -22,7 +25,7 @@
                 type="button"
                 aria-label="Add transaction"
                 @click="$dispatch('open-add-transaction')"
-                class="-mt-10 flex h-16 w-16 items-center justify-center rounded-full border-[5px] border-[#F7FAFC] bg-gradient-to-br from-[#6FD1D7] to-[#008C88] text-white shadow-[0_18px_36px_rgba(0,140,136,0.32)] transition duration-200 hover:scale-105 active:scale-95"
+                class="-mt-10 flex h-16 w-16 items-center justify-center rounded-full border-[5px] border-white bg-[#F45B8A] text-white shadow-[0_18px_36px_rgba(244,91,138,0.22)] transition duration-200 hover:scale-105 active:scale-95"
             >
                 <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
@@ -71,8 +74,8 @@
     x-data="{ active: @js($active) }"
     class="fixed bottom-6 left-6 top-6 z-50 hidden w-60 flex-col rounded-[2rem] border border-white/70 bg-white/72 p-4 shadow-[0_24px_60px_rgba(9,60,93,0.12)] backdrop-blur-2xl lg:flex"
 >
-    <div class="mb-8 rounded-2xl bg-gradient-to-br from-[#093C5D] via-[#0C6680] to-[#16B69C] p-5 text-white shadow-[0_18px_36px_rgba(9,60,93,0.2)]">
-        <p class="text-xs font-bold uppercase tracking-[0.16em] text-white/70">Finance OS</p>
+    <div class="mb-8 rounded-2xl bg-[#B8336A] p-5 text-white shadow-[0_14px_28px_rgba(184,51,106,0.16)]">
+        <p class="text-xs font-bold uppercase tracking-[0.16em] text-white/70">Pastel OS</p>
         <h2 class="mt-2 text-2xl font-extrabold tracking-normal">MyPengeluaran</h2>
     </div>
 
@@ -116,7 +119,7 @@
 
     <button
         type="button"
-        class="mt-auto flex items-center justify-center gap-2 rounded-full bg-gradient-to-br from-[#6FD1D7] to-[#008C88] px-5 py-3.5 text-sm font-extrabold text-white shadow-[0_18px_36px_rgba(0,140,136,0.26)] transition duration-200 hover:scale-[1.02] active:scale-[0.98]"
+        class="mt-auto flex items-center justify-center gap-2 rounded-full bg-[#F45B8A] px-5 py-3.5 text-sm font-extrabold text-white shadow-[0_14px_28px_rgba(244,91,138,0.20)] transition duration-200 hover:scale-[1.02] active:scale-[0.98]"
         @click="$dispatch('open-add-transaction')"
     >
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">

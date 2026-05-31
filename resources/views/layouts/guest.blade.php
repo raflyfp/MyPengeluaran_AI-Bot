@@ -13,17 +13,17 @@
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="min-h-screen overflow-x-hidden bg-[#F7FAFC] font-sans text-[#181C1E] antialiased selection:bg-[#6FD1D7]/30 selection:text-[#093C5D]">
-        <main class="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_right,rgba(111,209,215,0.28),transparent_34%),linear-gradient(180deg,#F7FAFC_0%,#EAF7F8_100%)] lg:grid lg:grid-cols-[0.95fr_1.05fr]">
+    <body class="min-h-screen overflow-x-hidden bg-white font-sans text-[#4B2735] antialiased selection:bg-[#F45B8A]/25 selection:text-[#B8336A]">
+        <main class="eva-shell relative min-h-screen overflow-hidden lg:grid lg:grid-cols-[0.95fr_1.05fr]">
             <section class="hidden min-h-screen flex-col justify-between p-8 lg:flex">
                 <div class="max-w-md">
                     <div class="inline-flex items-center gap-3 rounded-full border border-white/70 bg-white/70 px-4 py-2 shadow-[0_12px_30px_rgba(9,60,93,0.08)] backdrop-blur-xl">
-                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#093C5D] to-[#6FD1D7] text-sm font-extrabold text-white">MP</span>
+                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#B8336A] text-sm font-extrabold text-white">MP</span>
                         <span class="text-sm font-extrabold tracking-normal text-[#093C5D]">MyPengeluaran</span>
                     </div>
 
                     <div class="mt-16">
-                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#3B7597]">Smart finance App</p>
+                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#69A7D8]">Smart finance App</p>
                         <h1 class="mt-4 text-5xl font-extrabold leading-tight tracking-normal text-[#093C5D]">Catat uang masuk dan keluar tanpa ribet.</h1>
                         <p class="mt-5 max-w-lg text-base font-medium leading-7 text-[#3C4A42]">Dashboard fintech ringan dengan pencatatan manual, analytics, dan Telegram bot untuk logging transaksi cepat.</p>
                     </div>
@@ -49,7 +49,7 @@
                 <div class="w-full max-w-[430px]">
                     <div class="mb-6 flex items-center justify-between lg:hidden">
                         <div class="flex items-center gap-3">
-                            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-[#093C5D] to-[#6FD1D7] text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(9,60,93,0.16)]">MP</span>
+                            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-[#B8336A] text-sm font-extrabold text-white shadow-[0_10px_22px_rgba(184,51,106,0.16)]">MP</span>
                             <div>
                                 <p class="text-xs font-bold uppercase tracking-[0.16em] text-[#485A60]">Welcome to</p>
                                 <p class="text-lg font-extrabold text-[#093C5D]">MyPengeluaran</p>
