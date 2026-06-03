@@ -43,6 +43,11 @@ Route::middleware(['auth', 'active', 'verified'])->group(function () {
 Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/budget', [ProfileController::class, 'editBudget'])->name('profile.budget');
+    Route::patch('/profile/budget', [ProfileController::class, 'updateBudget'])->name('profile.budget.update');
+    Route::get('/profile/preferences', [ProfileController::class, 'editPreferences'])->name('profile.preferences');
+    Route::patch('/profile/preferences', [ProfileController::class, 'updatePreferences'])->name('profile.preferences.update');
+    Route::post('/profile/export-telegram', [ProfileController::class, 'exportTelegram'])->name('profile.export-telegram');
     Route::delete('/profile/telegram', [ProfileController::class, 'disconnectTelegram'])->name('profile.telegram.disconnect');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

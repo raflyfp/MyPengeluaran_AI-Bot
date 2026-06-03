@@ -169,7 +169,7 @@ class TelegramWebhookController extends Controller
         ]);
 
         // Balasan dikirim setelah database selesai, jadi user tahu inputnya berhasil atau gagal dibaca.
-        $telegram->sendMessage($chatId, $this->replyText($result['transaction'], $parsed), $this->mainKeyboard());
+        $telegram->sendMessage($chatId, $this->replyText($user, $result['transaction'], $parsed), $this->mainKeyboard());
 
         return response()->json([
             'ok' => true,
@@ -341,7 +341,7 @@ class TelegramWebhookController extends Controller
             'command' => '/eva',
         ]);
 
-        $telegram->sendMessage($chatId, $this->replyText($result['transaction'], $parsed), $this->mainKeyboard());
+        $telegram->sendMessage($chatId, $this->replyText($user, $result['transaction'], $parsed), $this->mainKeyboard());
 
         return response()->json([
             'ok' => true,
@@ -352,7 +352,7 @@ class TelegramWebhookController extends Controller
         ]);
     }
 
-    private function replyText($transaction, array $parsed): string
+    private function replyText(User $user, $transaction, array $parsed): string
     {
         // Kalau amount null, bot message tetap tercatat sebagai failed tetapi transaksi tidak dibuat.
         if (! $transaction) {
@@ -369,7 +369,7 @@ class TelegramWebhookController extends Controller
 
         $typeLabel = $parsed['type'] === 'income' ? 'Pemasukan' : 'Pengeluaran';
         $emoji = $parsed['type'] === 'income' ? '💰' : '✅';
-        $amount = 'Rp '.number_format((float) $parsed['amount'], 0, ',', '.');
+        $amount = ($user->currency ?? 'Rp') . ' ' . number_format((float) $parsed['amount'], 0, ',', '.');
 
         // Parser ditampilkan agar debug mudah: gemini berarti AI dipakai, regex berarti fallback.
         return implode("\n", [
@@ -456,11 +456,11 @@ class TelegramWebhookController extends Controller
         return implode("\n", [
             "📊 <b>{$title}</b>",
             '',
-            'Pemasukan: <b>'.$this->rupiah($income).'</b>',
-            'Pengeluaran: <b>'.$this->rupiah($expense).'</b>',
-            'Net cashflow: <b>'.$this->rupiah($balance).'</b>',
+            'Pemasukan: <b>'.$this->rupiah($income, $user).'</b>',
+            'Pengeluaran: <b>'.$this->rupiah($expense, $user).'</b>',
+            'Net cashflow: <b>'.$this->rupiah($balance, $user).'</b>',
             'Jumlah transaksi: '.$count,
-            'Kategori terbesar: '.($topCategory ? $topCategory->name.' '.$this->rupiah((float) $topCategory->total) : '-'),
+            'Kategori terbesar: '.($topCategory ? $topCategory->name.' '.$this->rupiah((float) $topCategory->total, $user) : '-'),
         ]);
     }
 
@@ -523,7 +523,7 @@ class TelegramWebhookController extends Controller
         }
 
         if ((float) $income <= 0) {
-            return 'Bulan ini sudah keluar '.$this->rupiah($expense).'. Belum ada pemasukan tercatat, jadi coba pantau dulu ya.';
+            return 'Bulan ini sudah keluar '.$this->rupiah($expense, $user).'. Belum ada pemasukan tercatat, jadi coba pantau dulu ya.';
         }
 
         $ratio = ((float) $expense / max((float) $income, 1)) * 100;
@@ -533,8 +533,8 @@ class TelegramWebhookController extends Controller
 
         return implode("\n", [
             'Menurut Eva, pengeluaran bulan ini '.$status.'.',
-            'Expense: <b>'.$this->rupiah($expense).'</b> dari income <b>'.$this->rupiah($income).'</b>.',
-            'Kategori paling besar: '.($topCategory ? $topCategory->name.' '.$this->rupiah((float) $topCategory->total) : '-').'.',
+            'Expense: <b>'.$this->rupiah($expense, $user).'</b> dari income <b>'.$this->rupiah($income, $user).'</b>.',
+            'Kategori paling besar: '.($topCategory ? $topCategory->name.' '.$this->rupiah((float) $topCategory->total, $user) : '-').'.',
         ]);
     }
 
@@ -552,9 +552,11 @@ class TelegramWebhookController extends Controller
         return [$now->startOfMonth(), $now->endOfMonth(), 'Ringkasan bulan ini'];
     }
 
-    private function rupiah(float|int|string $amount): string
+    private function rupiah(float|int|string $amount, ?User $user = null): string
     {
-        return 'Rp '.number_format((float) $amount, 0, ',', '.');
+        $currency = $user?->currency ?? 'Rp';
+
+        return $currency . ' ' . number_format((float) $amount, 0, ',', '.');
     }
 
     private function isCommand(string $text, string $command): bool

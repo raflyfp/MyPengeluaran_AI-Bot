@@ -550,8 +550,9 @@ class AnalyticsController extends Controller
     {
         $numericAmount = (float) ($amount ?? 0);
         $prefix = $withSign && $numericAmount > 0 ? '+' : ($withSign && $numericAmount < 0 ? '-' : '');
+        $currency = auth()->user()?->currency ?? 'Rp';
 
-        return $prefix.'Rp '.number_format(abs($numericAmount), 0, ',', '.');
+        return $prefix . $currency . ' ' . number_format(abs($numericAmount), 0, ',', '.');
     }
 
     private function displayCategoryName(?string $categoryName): string

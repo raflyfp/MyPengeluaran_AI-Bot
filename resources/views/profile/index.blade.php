@@ -23,9 +23,9 @@
 
         $accountSettings = [
             ['label' => 'Personal information', 'caption' => 'Name and email address', 'href' => route('profile.edit')],
-            ['label' => 'Security & PIN', 'caption' => 'Password, passcode, device access'],
-            ['label' => 'Budget preferences', 'caption' => 'Monthly limits and category goals'],
-            ['label' => 'Currency & language', 'caption' => 'Rupiah, English interface'],
+            ['label' => 'Security & PIN', 'caption' => 'Password, passcode, device access', 'href' => route('profile.edit')],
+            ['label' => 'Budget preferences', 'caption' => 'Monthly limits and category goals', 'href' => route('profile.budget')],
+            ['label' => 'Currency & language', 'caption' => 'Rupiah, English interface', 'href' => route('profile.preferences')],
         ];
 
         $displayName = $user?->name ?? auth()->user()?->name ?? 'User';
@@ -70,6 +70,18 @@
             @if (session('status') === 'telegram-disconnected')
                 <div class="rounded-2xl border border-[#BFEDE5] bg-[#DFF8F4] px-4 py-3 text-sm font-bold text-[#007A53] shadow-[0_10px_24px_rgba(9,60,93,0.06)] lg:col-span-2">
                     Telegram disconnected.
+                </div>
+            @endif
+
+            @if (session('status') === 'telegram-report-sent')
+                <div class="rounded-2xl border border-[#BFEDE5] bg-[#DFF8F4] px-4 py-3 text-sm font-bold text-[#007A53] shadow-[0_10px_24px_rgba(9,60,93,0.06)] lg:col-span-2">
+                    Laporan bulanan (PNG) berhasil dikirim ke Telegram kamu!
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="rounded-2xl border border-[#F4B3B3] bg-[#FFF5F5] px-4 py-3 text-sm font-bold text-[#BA1A1A] shadow-[0_10px_24px_rgba(9,60,93,0.06)] lg:col-span-2">
+                    {{ session('error') }}
                 </div>
             @endif
 
@@ -301,13 +313,16 @@
                     </div>
                     <div class="min-w-0 flex-1">
                         <h2 id="export-heading" class="text-xl font-bold tracking-normal text-[#181C1E]">Export report</h2>
-                        <p class="mt-1 text-sm font-semibold leading-6 text-[#72777E]">Download a clean PDF summary for income, expenses, and bot logs.</p>
-                        <button type="button" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#093C5D] px-5 py-3 text-sm font-extrabold text-white shadow-[0_14px_28px_rgba(9,60,93,0.22)] transition duration-200 hover:bg-[#0C6680] active:scale-[0.98] lg:mt-4">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M12 4v10M8 10l4 4 4-4M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Export May Report
-                        </button>
+                        <p class="mt-1 text-sm font-semibold leading-6 text-[#72777E]">Send a beautiful financial summary image (PNG) directly to your Telegram bot.</p>
+                        <form method="POST" action="{{ route('profile.export-telegram') }}">
+                            @csrf
+                            <button type="submit" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#093C5D] px-5 py-3 text-sm font-extrabold text-white shadow-[0_14px_28px_rgba(9,60,93,0.22)] transition duration-200 hover:bg-[#0C6680] active:scale-[0.98] lg:mt-4">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M12 4v10M8 10l4 4 4-4M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Send PNG Report to Telegram
+                            </button>
+                        </form>
                     </div>
                 </div>
             </section>

@@ -209,9 +209,9 @@ PROMPT;
         }
 
         $top = $month['top_expense_category'];
-        $suffix = $top ? ' Kategori terbesar: '.$top['name'].' '.$this->rupiah($top['amount']).'.' : '';
+        $suffix = $top ? ' Kategori terbesar: '.$top['name'].' '.$this->rupiah($top['amount'], $user).' ' : '';
 
-        return 'Bulan ini pengeluaranmu '.$this->rupiah($month['expense']).'.'.$suffix;
+        return 'Bulan ini pengeluaranmu '.$this->rupiah($month['expense'], $user).'.'.$suffix;
     }
 
     private function looksFinanceRelated(string $message): bool
@@ -324,18 +324,18 @@ PROMPT;
                 return 'Untuk sekarang Eva belum bisa kasih angka aman. Cashflow bulan ini belum cukup jelas, jadi mending tentukan budget kecil dulu.';
             }
 
-            return 'Kalau lihat cashflow sekarang, budget aman kira-kira sampai '.$this->rupiah($safeMax).'. Kalau mau lebih dari itu, Eva saranin tunggu pemasukan berikutnya.';
+            return 'Kalau lihat cashflow sekarang, budget aman kira-kira sampai '.$this->rupiah($safeMax, $user).'. Kalau mau lebih dari itu, Eva saranin tunggu pemasukan berikutnya.';
         }
 
         if ($amount <= max($netCashflow * 0.3, 0) || $amount <= max($balance * 0.1, 0)) {
-            return 'Menurut Eva, '.$this->rupiah($amount).' masih cukup aman kalau memang barangnya kepakai. Tetap pastikan kebutuhan utama bulan ini sudah aman ya.';
+            return 'Menurut Eva, '.$this->rupiah($amount, $user).' masih cukup aman kalau memang barangnya kepakai. Tetap pastikan kebutuhan utama bulan ini sudah aman ya.';
         }
 
         if ($amount <= max($netCashflow * 0.6, 0) || $amount <= max($balance * 0.2, 0)) {
-            return 'Masih bisa, tapi agak mepet. Eva saranin pasang budget maksimal '.$this->rupiah($amount).' dan jangan nambah aksesori dulu.';
+            return 'Masih bisa, tapi agak mepet. Eva saranin pasang budget maksimal '.$this->rupiah($amount, $user).' dan jangan nambah aksesori dulu.';
         }
 
-        return 'Untuk sekarang agak berat di cashflow. Lebih aman tunda dulu atau cari opsi di bawah '.$this->rupiah($amount * 0.7).'.';
+        return 'Untuk sekarang agak berat di cashflow. Lebih aman tunda dulu atau cari opsi di bawah '.$this->rupiah($amount * 0.7, $user).'.';
     }
 
     private function extractAmount(string $message): ?float
@@ -364,8 +364,10 @@ PROMPT;
         return trim($text);
     }
 
-    private function rupiah(float|int|string $amount): string
+    private function rupiah(float|int|string $amount, ?User $user = null): string
     {
-        return 'Rp'.number_format((float) $amount, 0, ',', '.');
+        $currency = $user?->currency ?? 'Rp';
+
+        return $currency . ' ' . number_format((float) $amount, 0, ',', '.');
     }
 }

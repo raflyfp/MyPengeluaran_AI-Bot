@@ -182,7 +182,9 @@ class TransactionController extends Controller
             $prefix = $type === 'income' ? '+' : '-';
         }
 
-        return $prefix.'Rp '.number_format(abs($numericAmount), 0, ',', '.');
+        $currency = auth()->user()?->currency ?? 'Rp';
+
+        return $prefix . $currency . ' ' . number_format(abs($numericAmount), 0, ',', '.');
     }
 
     private function mapCategoryIcon(?string $icon, ?string $categoryName): string
