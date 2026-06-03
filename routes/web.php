@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\BotController;
@@ -46,5 +47,10 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/auth/google', [GoogleController::class, 'redirect'])
+    ->name('google.login');
 
-require __DIR__.'/auth.php';
+Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
+
+
+require __DIR__ . '/auth.php';
