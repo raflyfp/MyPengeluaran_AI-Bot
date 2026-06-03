@@ -154,16 +154,19 @@ class ProfileController extends Controller
         return Redirect::route('profile.preferences')->with('status', 'preferences-updated');
     }
 
-    public function exportTelegram(Request $request, TelegramBotClient $telegram): RedirectResponse
+    public function exportTelegram(Request $request, TelegramBotClient $telegram): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
 
         if (blank($user->telegram_user_id) && blank($user->telegram_chat_id)) {
-            return Redirect::route('profile.index')
-                ->with('error', 'Silakan sambungkan Telegram terlebih dahulu di bagian Connections.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Silakan sambungkan Telegram terlebih dahulu di bagian Connections.',
+            ], 422);
         }
 
         $chatId = $user->telegram_chat_id ?: $user->telegram_user_id;
+        $currency = $user->currency ?: 'Rp';
 
         // Fetch user data
         $monthlySummary = Transaction::monthlySummaryFor($user);
@@ -211,16 +214,16 @@ class ProfileController extends Controller
         imagefilledrectangle($im, 20, 120, 290, 240, $white);
         imagerectangle($im, 20, 120, 290, 240, $pinkBorder);
         imagestring($im, 4, 40, 140, "Total Balance", $dark);
-        imagestring($im, 5, 40, 170, "Rp " . number_format($balance, 0, ',', '.'), $pink);
+        imagestring($im, 5, 40, 170, $currency . " " . number_format($balance, 0, ',', '.'), $pink);
 
         // Income & Expense Card
         imagefilledrectangle($im, 310, 120, 580, 240, $white);
         imagerectangle($im, 310, 120, 580, 240, $pinkBorder);
         imagestring($im, 3, 330, 135, "Income:", $dark);
-        imagestring($im, 4, 330, 155, "Rp " . number_format($income, 0, ',', '.'), $green);
+        imagestring($im, 4, 330, 155, $currency . " " . number_format($income, 0, ',', '.'), $green);
 
         imagestring($im, 3, 330, 185, "Expense:", $dark);
-        imagestring($im, 4, 330, 205, "Rp " . number_format($expense, 0, ',', '.'), $pink);
+        imagestring($im, 4, 330, 205, $currency . " " . number_format($expense, 0, ',', '.'), $pink);
 
         // Top Category Card
         imagefilledrectangle($im, 20, 260, 580, 380, $white);
@@ -232,7 +235,7 @@ class ProfileController extends Controller
             imagestring($im, 3, 40, $y, "No transactions recorded this month.", $gray);
         } else {
             foreach ($topCategories as $cat) {
-                imagestring($im, 3, 40, $y, "- " . $cat->name . ": Rp " . number_format((float) $cat->total, 0, ',', '.'), $dark);
+                imagestring($im, 3, 40, $y, "- " . $cat->name . ": " . $currency . " " . number_format((float) $cat->total, 0, ',', '.'), $dark);
                 $y += 20;
             }
         }
@@ -251,11 +254,15 @@ class ProfileController extends Controller
         }
 
         if ($success) {
-            return Redirect::route('profile.index')
-                ->with('status', 'telegram-report-sent');
+            return response()->json([
+                'success' => true,
+                'message' => 'Laporan bulanan (' . $currency . ') berhasil dikirim ke Telegram kamu!',
+            ]);
         }
 
-        return Redirect::route('profile.index')
-            ->with('error', 'Gagal mengirim laporan ke Telegram. Coba lagi nanti.');
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal mengirim laporan ke Telegram. Coba lagi nanti.',
+        ], 500);
     }
 }

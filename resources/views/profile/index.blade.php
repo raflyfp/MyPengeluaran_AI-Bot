@@ -44,6 +44,44 @@
             spendingAlerts: true,
             weeklySummary: true,
             botReceipts: false,
+            exportLoading: false,
+            exportSuccess: false,
+            exportError: false,
+            exportMessage: '',
+            showExportModal: false,
+            async sendTelegramReport() {
+                this.exportLoading = true;
+                this.exportSuccess = false;
+                this.exportError = false;
+                this.exportMessage = '';
+                this.showExportModal = true;
+
+                try {
+                    const response = await fetch('{{ route('profile.export-telegram') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        this.exportSuccess = true;
+                        this.exportMessage = data.message;
+                    } else {
+                        this.exportError = true;
+                        this.exportMessage = data.message || 'Gagal mengirim laporan ke Telegram. Coba lagi nanti.';
+                    }
+                } catch (error) {
+                    this.exportError = true;
+                    this.exportMessage = 'Terjadi kesalahan jaringan atau server. Silakan coba lagi.';
+                } finally {
+                    this.exportLoading = false;
+                }
+            }
         }"
         :class="darkMode ? 'text-white' : ''"
     >
@@ -314,13 +352,20 @@
                     <div class="min-w-0 flex-1">
                         <h2 id="export-heading" class="text-xl font-bold tracking-normal text-[#181C1E]">Export report</h2>
                         <p class="mt-1 text-sm font-semibold leading-6 text-[#72777E]">Send a beautiful financial summary image (PNG) directly to your Telegram bot.</p>
-                        <form method="POST" action="{{ route('profile.export-telegram') }}">
-                            @csrf
-                            <button type="submit" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#093C5D] px-5 py-3 text-sm font-extrabold text-white shadow-[0_14px_28px_rgba(9,60,93,0.22)] transition duration-200 hover:bg-[#0C6680] active:scale-[0.98] lg:mt-4">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M12 4v10M8 10l4 4 4-4M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                Send PNG Report to Telegram
+                        <form @submit.prevent="sendTelegramReport()">
+                            <button type="submit" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#093C5D] px-5 py-3 text-sm font-extrabold text-white shadow-[0_14px_28px_rgba(9,60,93,0.22)] transition duration-200 hover:bg-[#0C6680] active:scale-[0.98] lg:mt-4" :disabled="exportLoading" :class="exportLoading ? 'opacity-75 cursor-not-allowed' : ''">
+                                <template x-if="!exportLoading">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M12 4v10M8 10l4 4 4-4M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </template>
+                                <template x-if="exportLoading">
+                                    <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </template>
+                                <span x-text="exportLoading ? 'Sending...' : 'Send PNG Report to Telegram'"></span>
                             </button>
                         </form>
                     </div>
@@ -362,6 +407,258 @@
                 </form>
             </section>
         </main>
+
+        <!-- Custom CSS for Modal to prevent layout overlapping and transparency due to tailwind compilation constraints -->
+        <style>
+            .custom-modal-backdrop {
+                position: fixed !important;
+                top: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                z-index: 9999 !important;
+                display: flex;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 1rem !important;
+                background-color: rgba(75, 39, 53, 0.5) !important;
+                backdrop-filter: blur(12px) !important;
+                -webkit-backdrop-filter: blur(12px) !important;
+            }
+
+            .custom-modal-card {
+                position: relative !important;
+                width: 100% !important;
+                max-width: 22rem !important;
+                border-radius: 2rem !important;
+                border: 4px solid #4B2735 !important;
+                background-color: #FDF8F5 !important;
+                padding: 2rem !important;
+                box-shadow: 8px 8px 0px #4B2735 !important;
+                text-align: center !important;
+                color: #4B2735 !important;
+                z-index: 10000 !important;
+            }
+
+            .app-dark .custom-modal-card {
+                background-color: #3f3543 !important;
+                border-color: #ffffff !important;
+                box-shadow: 8px 8px 0px #ffffff !important;
+                color: #ffffff !important;
+            }
+
+            .custom-modal-close-btn {
+                position: absolute !important;
+                top: 1rem !important;
+                right: 1rem !important;
+                display: flex;
+                height: 2.25rem !important;
+                width: 2.25rem !important;
+                align-items: center !important;
+                justify-content: center !important;
+                border-radius: 9999px !important;
+                border: 2px solid #4B2735 !important;
+                background-color: #ffffff !important;
+                color: #4B2735 !important;
+                cursor: pointer !important;
+                box-shadow: 2px 2px 0px #4B2735 !important;
+                transition: all 0.15s !important;
+            }
+
+            .custom-modal-close-btn:hover {
+                transform: translate(-1px, -1px) !important;
+                box-shadow: 3px 3px 0px #4B2735 !important;
+            }
+
+            .custom-modal-close-btn:active {
+                transform: translate(1px, 1px) !important;
+                box-shadow: 1px 1px 0px #4B2735 !important;
+            }
+
+            .custom-modal-spinner {
+                height: 4rem !important;
+                width: 4rem !important;
+                border-radius: 9999px !important;
+                border: 4px dashed #B8336A !important;
+                animation: custom-spin 1.5s linear infinite !important;
+            }
+
+            .custom-modal-spinner-inner {
+                position: absolute !important;
+                height: 2.5rem !important;
+                width: 2.5rem !important;
+                border-radius: 9999px !important;
+                background-color: #FFF1F6 !important;
+                display: flex;
+                align-items: center !important;
+                justify-content: center !important;
+                color: #B8336A !important;
+            }
+
+            .custom-modal-icon-container {
+                display: flex;
+                height: 4rem !important;
+                width: 4rem !important;
+                align-items: center !important;
+                justify-content: center !important;
+                border-radius: 9999px !important;
+                margin: 0 auto 1rem auto !important;
+            }
+
+            .custom-modal-icon-success {
+                background-color: #E8F8F5 !important;
+                border: 4px solid #2E9F86 !important;
+                color: #2E9F86 !important;
+                box-shadow: 4px 4px 0px #2E9F86 !important;
+            }
+
+            .custom-modal-icon-error {
+                background-color: #FFF5F5 !important;
+                border: 4px solid #BA1A1A !important;
+                color: #BA1A1A !important;
+                box-shadow: 4px 4px 0px #BA1A1A !important;
+            }
+
+            .custom-modal-btn {
+                margin-top: 1.5rem !important;
+                width: 100% !important;
+                border-radius: 9999px !important;
+                padding: 0.85rem 1.5rem !important;
+                font-size: 0.95rem !important;
+                font-weight: 800 !important;
+                color: #ffffff !important;
+                border: 2px solid #4B2735 !important;
+                cursor: pointer !important;
+                transition: all 0.15s !important;
+            }
+
+            .custom-modal-btn-success {
+                background-color: #2E9F86 !important;
+                box-shadow: 4px 4px 0px #4B2735 !important;
+            }
+            .custom-modal-btn-success:hover {
+                transform: translate(-1px, -1px) !important;
+                box-shadow: 5px 5px 0px #4B2735 !important;
+            }
+            .custom-modal-btn-success:active {
+                transform: translate(1px, 1px) !important;
+                box-shadow: 2px 2px 0px #4B2735 !important;
+            }
+
+            .custom-modal-btn-error {
+                background-color: #BA1A1A !important;
+                box-shadow: 4px 4px 0px #4B2735 !important;
+            }
+            .custom-modal-btn-error:hover {
+                transform: translate(-1px, -1px) !important;
+                box-shadow: 5px 5px 0px #4B2735 !important;
+            }
+            .custom-modal-btn-error:active {
+                transform: translate(1px, 1px) !important;
+                box-shadow: 2px 2px 0px #4B2735 !important;
+            }
+
+            .custom-modal-state-content {
+                display: flex;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 1rem !important;
+                padding: 1rem 0 !important;
+            }
+
+            @keyframes custom-spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        </style>
+
+        <!-- Modal Alert Overlay -->
+        <div
+            x-show="showExportModal"
+            :style="showExportModal ? 'display: flex !important;' : 'display: none !important;'"
+            style="display: none !important;"
+            class="custom-modal-backdrop"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            x-cloak
+        >
+            <div
+                class="custom-modal-card"
+                @click.away="if (!exportLoading) showExportModal = false"
+            >
+                <!-- Close Button (only when not loading) -->
+                <template x-if="!exportLoading">
+                    <button
+                        @click="showExportModal = false"
+                        class="custom-modal-close-btn"
+                        aria-label="Close dialog"
+                    >
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <path d="M18 6 6 18M6 6l12 12" />
+                        </svg>
+                    </button>
+                </template>
+
+                <!-- Content based on state -->
+                <div style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- 1. LOADING STATE -->
+                    <div x-show="exportLoading" class="custom-modal-state-content">
+                        <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+                            <!-- Cute scrapbook spinner style -->
+                            <div class="custom-modal-spinner"></div>
+                            <div class="custom-modal-spinner-inner">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 style="font-size: 1.35rem !important; font-weight: 800 !important; color: #4B2735 !important; margin: 0.5rem 0 0 0 !important;">Mengirim Laporan...</h3>
+                        <p style="font-size: 0.875rem !important; font-weight: 600 !important; color: #72777E !important; margin: 0 !important; line-height: 1.4 !important;">Harap tunggu, bot sedang membuat dan mengirim gambar laporan ke Telegram Anda.</p>
+                    </div>
+
+                    <!-- 2. SUCCESS STATE -->
+                    <div x-show="exportSuccess" class="custom-modal-state-content">
+                        <div class="custom-modal-icon-container custom-modal-icon-success">
+                            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </div>
+                        <h3 style="font-size: 1.35rem !important; font-weight: 800 !important; color: #2E9F86 !important; margin: 0.5rem 0 0 0 !important;">Berhasil Dikirim!</h3>
+                        <p style="font-size: 0.875rem !important; font-weight: 600 !important; color: #72777E !important; margin: 0 !important; line-height: 1.4 !important;" x-text="exportMessage"></p>
+                        
+                        <button
+                            @click="showExportModal = false"
+                            class="custom-modal-btn custom-modal-btn-success"
+                        >
+                            Mantap
+                        </button>
+                    </div>
+
+                    <!-- 3. ERROR STATE -->
+                    <div x-show="exportError" class="custom-modal-state-content">
+                        <div class="custom-modal-icon-container custom-modal-icon-error">
+                            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </div>
+                        <h3 style="font-size: 1.35rem !important; font-weight: 800 !important; color: #BA1A1A !important; margin: 0.5rem 0 0 0 !important;">Gagal Mengirim</h3>
+                        <p style="font-size: 0.875rem !important; font-weight: 600 !important; color: #72777E !important; margin: 0 !important; line-height: 1.4 !important;" x-text="exportMessage"></p>
+                        
+                        <button
+                            @click="showExportModal = false"
+                            class="custom-modal-btn custom-modal-btn-error"
+                        >
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <x-bottom-nav active="profile" />
