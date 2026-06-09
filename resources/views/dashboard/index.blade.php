@@ -128,4 +128,143 @@
     </div>
 
     <x-bottom-nav active="home" />
+
+    <!-- CSS styles for custom telegram connection popup modal -->
+    <style>
+        .telegram-modal-backdrop {
+            position: fixed !important;
+            top: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            z-index: 9999 !important;
+            display: flex;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 1rem !important;
+            background-color: rgba(75, 39, 53, 0.5) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+        }
+
+        .telegram-modal-card {
+            position: relative !important;
+            width: 100% !important;
+            max-width: 22rem !important;
+            border-radius: 2rem !important;
+            border: 4px solid #4B2735 !important;
+            background-color: #FDF8F5 !important;
+            padding: 2rem !important;
+            box-shadow: 8px 8px 0px #4B2735 !important;
+            text-align: center !important;
+            color: #4B2735 !important;
+            z-index: 10000 !important;
+        }
+
+        .app-dark .telegram-modal-card {
+            background-color: #3f3543 !important;
+            border-color: #ffffff !important;
+            box-shadow: 8px 8px 0px #ffffff !important;
+            color: #ffffff !important;
+        }
+    </style>
+
+    <!-- Modal Alert Overlay for Telegram Bot connection status -->
+    <div
+        x-data="{
+            showTelegramPopup: !@js($telegramStatus['connected'] ?? false),
+            copied: false,
+            command: @js($telegramStatus['link_command'] ?? ''),
+            dismiss() {
+                this.showTelegramPopup = false;
+                document.body.classList.remove('overflow-hidden');
+            }
+        }"
+        x-init="if (showTelegramPopup) { document.body.classList.add('overflow-hidden'); }"
+        x-show="showTelegramPopup"
+        :style="showTelegramPopup ? 'display: flex !important;' : 'display: none !important;'"
+        style="display: none !important;"
+        class="telegram-modal-backdrop"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        x-cloak
+    >
+        <div
+            class="telegram-modal-card"
+            @click.away="dismiss()"
+        >
+            <!-- Close Button -->
+            <button
+                @click="dismiss()"
+                class="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#4B2735] bg-white text-[#4B2735] shadow-[2px_2px_0px_#4B2735] transition duration-150 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#4B2735] active:translate-x-0 active:translate-y-0 active:shadow-[1px_1px_0px_#4B2735] dark:border-white dark:bg-[#463845] dark:text-white dark:shadow-[2px_2px_0px_#ffffff] dark:hover:shadow-[3px_3px_0px_#ffffff]"
+                aria-label="Tutup popup"
+            >
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+            </button>
+
+            <!-- Cute header graphic/icon -->
+            <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#4B2735] bg-[#E7F3FF] text-[#1D78C1] shadow-[4px_4px_0px_#4B2735] dark:border-white dark:bg-sky-950 dark:text-sky-300 dark:shadow-[4px_4px_0px_#ffffff]">
+                <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M21 4 3 11.2l6.8 2.4M21 4l-4.8 16-6.4-6.4M21 4 9.8 13.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <h3 class="text-xl font-extrabold text-[#4B2735] dark:text-white">Sambungkan Telegram!</h3>
+            <p class="mt-2 text-sm font-semibold text-[#9B7A82] dark:text-[#eadde4] leading-relaxed">
+                Catat transaksi harianmu lebih praktis lewat chat Telegram. Dapatkan laporan keuangan bulanan otomatis langsung ke HP-mu!
+            </p>
+
+            @if (!empty($telegramStatus['link_command']))
+                <!-- Copy-paste section for command -->
+                <div class="mt-4 rounded-2xl border-2 border-[#4B2735] bg-white p-3 dark:border-white dark:bg-[#463845]">
+                    <p class="text-left text-xs font-bold uppercase tracking-[0.12em] text-[#9B7A82] dark:text-[#eadde4]">Salin Kode Koneksi</p>
+                    <div class="mt-1.5 flex items-center justify-between gap-3">
+                        <code class="break-all text-left font-mono text-sm font-extrabold text-[#B8336A] dark:text-[#ffbfd1]">{{ $telegramStatus['link_command'] }}</code>
+                        <button
+                            type="button"
+                            class="flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full border-2 border-[#4B2735] bg-white px-3 text-xs font-extrabold text-[#4B2735] shadow-[2px_2px_0px_#4B2735] transition duration-150 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#4B2735] active:translate-x-0 active:translate-y-0 active:shadow-[1px_1px_0px_#4B2735] dark:border-white dark:bg-[#3f3543] dark:text-white dark:shadow-[2px_2px_0px_#ffffff]"
+                            @click="(navigator.clipboard ? navigator.clipboard.writeText(command) : Promise.resolve()).finally(() => { copied = true; setTimeout(() => copied = false, 1400) })"
+                        >
+                            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M8 8V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3M6 9h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            </svg>
+                            <span x-text="copied ? 'Disalin' : 'Salin'"></span>
+                        </button>
+                    </div>
+                </div>
+                <p class="mt-2 text-[10px] font-bold text-[#9B7A82] dark:text-[#eadde4] leading-relaxed">
+                    *Klik "Hubungkan Sekarang", tekan Start pada Telegram, lalu kirim kode di atas.
+                </p>
+            @endif
+
+            <div class="mt-6 flex flex-col gap-2.5">
+                <a
+                    href="{{ $telegramStatus['link_url'] ?: 'https://t.me/Eclairs11_bot' }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    @click="dismiss()"
+                    class="flex h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-[#4B2735] bg-[#2E9F86] text-sm font-extrabold text-white shadow-[4px_4px_0px_#4B2735] transition duration-150 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#4B2735] active:translate-x-0 active:translate-y-0 active:shadow-[2px_2px_0px_#4B2735] dark:border-white dark:shadow-[4px_4px_0px_#ffffff]"
+                >
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M21 4 3 11.2l6.8 2.4M21 4l-4.8 16-6.4-6.4M21 4 9.8 13.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Hubungkan Sekarang
+                </a>
+                
+                <button
+                    type="button"
+                    @click="dismiss()"
+                    class="flex h-12 w-full items-center justify-center rounded-full border-2 border-[#4B2735] bg-white text-sm font-extrabold text-[#4B2735] shadow-[4px_4px_0px_#4B2735] transition duration-150 hover:-translate-y-0.5 hover:shadow-[5px_5px_0px_#4B2735] active:translate-x-0 active:translate-y-0 active:shadow-[2px_2px_0px_#4B2735] dark:border-white dark:bg-[#3f3543] dark:text-white dark:shadow-[4px_4px_0px_#ffffff]"
+                >
+                    Nanti Saja
+                </button>
+            </div>
+        </div>
+    </div>
 </x-app-layout>

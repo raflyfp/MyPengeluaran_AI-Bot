@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Services\TelegramAccountLink;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 use Illuminate\Contracts\View\View;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function __invoke(Request $request): View
+    public function __invoke(Request $request, TelegramAccountLink $telegramAccountLink): View
     {
         $user = $request->user();
         $monthlySummary = Transaction::monthlySummaryFor($user);
@@ -20,8 +21,19 @@ class DashboardController extends Controller
         $categoryBreakdown = Transaction::categorySpendingBreakdownFor($user);
         $monthlyExpenseTotal = (float) $monthlySummary['expense_total'];
 
+        $telegramStatus = [
+            'connected' => filled($user->telegram_user_id) || filled($user->telegram_chat_id),
+        ];
+
+        if (! $telegramStatus['connected']) {
+            $telegramLink = $telegramAccountLink->forUser($user);
+            $telegramStatus['link_url'] = $telegramLink['url'];
+            $telegramStatus['link_command'] = $telegramLink['command'];
+        }
+
         return view('dashboard', [
             'user' => $user,
+            'telegramStatus' => $telegramStatus,
             'summary' => [
                 'monthly_income_total' => $monthlySummary['income_total'],
                 'monthly_expense_total' => $monthlySummary['expense_total'],
