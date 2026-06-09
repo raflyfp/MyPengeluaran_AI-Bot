@@ -245,7 +245,7 @@
 
             <div class="mt-6 flex flex-col gap-2.5">
                 <a
-                    href="{{ $telegramStatus['link_url'] ?: 'https://t.me/Eclairs11_bot' }}"
+                    href="{{ $telegramStatus['link_url'] ?? 'https://t.me/Eclairs11_bot' }}"
                     target="_blank"
                     rel="noopener noreferrer"
                     @click="dismiss()"

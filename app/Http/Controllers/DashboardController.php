@@ -23,6 +23,8 @@ class DashboardController extends Controller
 
         $telegramStatus = [
             'connected' => filled($user->telegram_user_id) || filled($user->telegram_chat_id),
+            'link_url' => null,
+            'link_command' => null,
         ];
 
         if (! $telegramStatus['connected']) {
